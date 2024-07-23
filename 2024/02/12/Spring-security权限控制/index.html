@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Spring security权限控制 | Crisite の博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="本文的分析基于Spring Security 5.7.2，本文中主要分析的关键模块 AbstractAccessDecisionManager 和 RoleVoter 在Spring Security 6.x中都被弃用了（被 AuthorizationManager 替换了） TUT ~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring security权限控制">
+<meta property="og:url" content="https://crisite.github.io/2024/02/12/Spring-security%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/">
+<meta property="og:site_name" content="Crisite の博客">
+<meta property="og:description" content="本文的分析基于Spring Security 5.7.2，本文中主要分析的关键模块 AbstractAccessDecisionManager 和 RoleVoter 在Spring Security 6.x中都被弃用了（被 AuthorizationManager 替换了） TUT ~">
+<meta property="og:locale">
+<meta property="og:image" content="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240213010359486.png">
+<meta property="og:image" content="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240121094717192.png">
+<meta property="og:image" content="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240214232530058.png">
+<meta property="og:image" content="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240214235550928.png">
+<meta property="og:image" content="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240215003922277.png">
+<meta property="article:published_time" content="2024-02-12T09:26:53.000Z">
+<meta property="article:modified_time" content="2024-02-14T16:49:26.000Z">
+<meta property="article:author" content="Crisite">
+<meta property="article:tag" content="源码">
+<meta property="article:tag" content="Spring Security">
+<meta property="article:tag" content="SpringBoot">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240213010359486.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Crisite の博客" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Crisite の博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Here&#39;s an blog...</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Suche"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://crisite.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Spring-security权限控制" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/02/12/Spring-security%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/" class="article-date">
+  <time class="dt-published" datetime="2024-02-12T09:26:53.000Z" itemprop="datePublished">2024-02-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Spring security权限控制
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>本文的分析基于Spring Security 5.7.2，本文中主要分析的关键模块 AbstractAccessDecisionManager 和 RoleVoter 在Spring Security 6.x中都被弃用了（被 AuthorizationManager 替换了） TUT ~</p>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240213010359486.png" alt="image-20240213010359486"></p>
+<span id="more"></span>
+
+<h2 id="流程分析"><a href="#流程分析" class="headerlink" title="流程分析"></a>流程分析</h2><p>Spring Security的功能都是基于拦截器实现的，从FilterChain开始</p>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240121094717192.png" alt="image-20240121094717192"></p>
+<p>其中FilterSecurityInterceptor就主要负责SpringSecurity的权限，拦截器的作用如下</p>
+<ol>
+<li>获取到需访问接口的权限信息，即@Secured 或@PreAuthorize定义的权限信息；</li>
+<li>根据SecurityContextHolder中存储的authentication用户信息，来判断是否包含与需访问接口的权限信息，若包含，则说明拥有该接口权限；</li>
+<li>主要授权功能在父类AbstractSecurityInterceptor中实现；</li>
+</ol>
+<p><code>FilterSecurityInterceptor.java</code></p>
+<pre><code class="java">/** 入口方法 */
+public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+    throws IOException, ServletException &#123;
+    // 将传入的数据封装成一个 FilterInvocation 对象，方便在此拦截器中对数据进行处理 解耦合~
+    invoke(new FilterInvocation(request, response, chain));
+&#125;
+
+public void invoke(FilterInvocation filterInvocation) throws IOException, ServletException &#123;
+    if (isApplied(filterInvocation) &amp;&amp; this.observeOncePerRequest) &#123;
+        // 过滤器已经处理过此请求 直接进入下一个过滤器
+        filterInvocation.getChain().doFilter(filterInvocation.getRequest(), filterInvocation.getResponse());
+        return;
+    &#125;
+    // 执行安全检查
+    if (filterInvocation.getRequest() != null &amp;&amp; this.observeOncePerRequest) &#123;
+        filterInvocation.getRequest().setAttribute(FILTER_APPLIED, Boolean.TRUE);
+    &#125;
+    // 1.授权具体实现入口
+    InterceptorStatusToken token = super.beforeInvocation(filterInvocation);
+    try &#123;
+        // 授权通过 
+        filterInvocation.getChain().doFilter(filterInvocation.getRequest(), filterInvocation.getResponse());
+    &#125;
+    finally &#123;
+        super.finallyInvocation(token);
+    &#125;
+    // 授权通过后续处理
+    super.afterInvocation(token, null);
+&#125;
+</code></pre>
+<p>FilterSecurityInterceptor调用父类的beforeInvocation完成权限校验</p>
+<p><code>AbstractSecurityInterceptor.java</code></p>
+<pre><code class="java">protected InterceptorStatusToken beforeInvocation(Object object) &#123;
+    // .... 大量的参数校验 直接省略
+    // 1.
+    Collection&lt;ConfigAttribute&gt; attributes = this.obtainSecurityMetadataSource().getAttributes(object);
+    // 2. 获取SecurityContextHolde中的Authentication
+    Authentication authenticated = authenticateIfRequired();
+    // 3.调用this.accessDecisionManager.decide(authenticated, object, attributes)
+    attemptAuthorization(object, attributes, authenticated);
+    Authentication runAs = this.runAsManager.buildRunAs(authenticated, object, attributes);
+    return new InterceptorStatusToken(SecurityContextHolder.getContext(), false, attributes, object);
+
+&#125;
+</code></pre>
+<p>在AbstractSecurityInterceptor中 1 -&gt; attributes 里面保存了访问该方法需要的权限</p>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240214232530058.png" alt="image-20240214232530058"></p>
+<p>在attemptAuthorization()方法中会调用<code>AccessDecisionManager</code>(在Spring Security 6.x 被废弃了)</p>
+<h2 id="AccessDecisionManager"><a href="#AccessDecisionManager" class="headerlink" title="AccessDecisionManager"></a>AccessDecisionManager</h2><p><code>AccessDecisionManager</code>类结构如下</p>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240214235550928.png" alt="image-20240214235550928"></p>
+<ul>
+<li>AffirmativeBased表示一票通过就授权成功，这是AccessDecisionManager默认类；</li>
+<li>ConsensusBased表示少数服从多数；</li>
+<li>UnanimousBased表示一票反对则将抛出异常；</li>
+</ul>
+<p>以<code>AffirmativeBased</code>为例</p>
+<pre><code class="java">public void decide(Authentication authentication, Object object, Collection&lt;ConfigAttribute&gt; configAttributes)
+      throws AccessDeniedException &#123;
+   int deny = 0;
+   for (AccessDecisionVoter voter : getDecisionVoters()) &#123;
+       // 调用投票器 如果返回1则授权成功退出。如果返回-1则deny++，如果到最后仍然没有授权成功并退出，则抛出异常
+      int result = voter.vote(authentication, object, configAttributes);
+      switch (result) &#123;
+      case AccessDecisionVoter.ACCESS_GRANTED:
+         return;
+      case AccessDecisionVoter.ACCESS_DENIED:
+         deny++;
+         break;
+      default:
+         break;
+      &#125;
+   &#125;
+   if (deny &gt; 0) &#123;
+      throw new AccessDeniedException(
+            this.messages.getMessage(&quot;AbstractAccessDecisionManager.accessDenied&quot;, &quot;Access is denied&quot;));
+   &#125;
+   // To get this far, every AccessDecisionVoter abstained
+   checkAllowIfAllAbstainDecisions();
+&#125;
+</code></pre>
+<h2 id="投票器"><a href="#投票器" class="headerlink" title="投票器"></a>投票器</h2><p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240215003922277.png" alt="image-20240215003922277"></p>
+<p>主要的用的投票器就这三个</p>
+<ul>
+<li>RoleVoter: @Secure注解通过这个投票器来投票</li>
+<li>PreInvocationAuthorizationAdviceVoter： @PreAuthorize 和 @PostAuthorize 两个注解通过这个注解器来投票，因为类里面是通过SpEL来实现投票功能，不是太懂~</li>
+<li>WebExpressionVoter： URL请求通过 WebExpressionVoter 来授权（直接permitAll了）</li>
+</ul>
+<hr>
+<blockquote>
+<p>参考文献：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40706420/article/details/134992217">深入理解Spring Security授权机制原理</a></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2146062">SpringSecurity鉴权流程分析 附源码注释，xdm，一起来看看吧</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.javaboy.org/2020/0911/springsecurity-voter.html">Spring Security 权限管理的投票器与表决机制</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://crisite.github.io/2024/02/12/Spring-security%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6/" data-id="clyxufjsc001mswm66snq9pid" data-title="Spring security权限控制" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-Security/" rel="tag">Spring Security</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%BA%90%E7%A0%81/" rel="tag">源码</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/02/14/Spring-Security%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6%E4%B9%8B%E6%8E%88%E6%9D%83%E6%B3%A8%E8%A7%A3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          Spring Security权限控制之授权注解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/02/11/%E5%85%B3%E4%BA%8ESpring-Security%E6%9D%83%E9%99%90%E7%BB%A7%E6%89%BF%E7%9A%84%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">关于Spring Security权限继承的问题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">-设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Application/" rel="tag">Application</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rabbitmq/" rel="tag">Rabbitmq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Security/" rel="tag">Spring Security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SqlServer/" rel="tag">SqlServer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/" rel="tag">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81/" rel="tag">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE/" rel="tag">项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">高并发分布式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">-设计模式</a> <a href="/tags/Application/" style="font-size: 10px;">Application</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 18.57px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Mysql/" style="font-size: 15.71px;">Mysql</a> <a href="/tags/RabbitMQ/" style="font-size: 10px;">RabbitMQ</a> <a href="/tags/Rabbitmq/" style="font-size: 10px;">Rabbitmq</a> <a href="/tags/Redis/" style="font-size: 17.14px;">Redis</a> <a href="/tags/Spring-Security/" style="font-size: 14.29px;">Spring Security</a> <a href="/tags/SpringBoot/" style="font-size: 17.14px;">SpringBoot</a> <a href="/tags/SqlServer/" style="font-size: 10px;">SqlServer</a> <a href="/tags/Windows/" style="font-size: 10px;">Windows</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/shell/" style="font-size: 11.43px;">shell</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 11.43px;">中间件</a> <a href="/tags/%E6%BA%90%E7%A0%81/" style="font-size: 14.29px;">源码</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 15.71px;">设计模式</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 12.86px;">项目</a> <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 15.71px;">高并发分布式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">July 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">June 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">December 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/07/01/nginx%E7%AE%80%E8%BF%B0/">nginx简述</a>
+          </li>
+        
+          <li>
+            <a href="/2024/07/01/%E6%98%BE%E7%A4%BA%E5%99%A8%E5%9C%A8%E4%B8%A4%E4%B8%AA%E8%BE%93%E5%85%A5%E6%BA%90%E4%B8%AD%E5%BF%AB%E9%80%9F%E5%88%87%E6%8D%A2/">显示器在两个输入源中快速切换</a>
+          </li>
+        
+          <li>
+            <a href="/2024/06/01/SSH%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/">SSH配置管理</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/22/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/">存储过程</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/22/Excel%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/">Excel常用函数</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 Crisite<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

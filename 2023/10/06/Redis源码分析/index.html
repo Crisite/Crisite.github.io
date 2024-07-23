@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Redis源码分析 | Crisite の博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Redis7.2 源码分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis源码分析">
+<meta property="og:url" content="https://crisite.github.io/2023/10/06/Redis%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+<meta property="og:site_name" content="Crisite の博客">
+<meta property="og:description" content="Redis7.2 源码分析">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-10-06T15:29:39.000Z">
+<meta property="article:modified_time" content="2023-10-08T09:13:00.000Z">
+<meta property="article:author" content="Crisite">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Crisite の博客" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Crisite の博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Here&#39;s an blog...</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Suche"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://crisite.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Redis源码分析" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/10/06/Redis%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="article-date">
+  <time class="dt-published" datetime="2023-10-06T15:29:39.000Z" itemprop="datePublished">2023-10-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Redis源码分析
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>Redis7.2 源码分析</p>
+<span id="more"></span>
+
+<h4 id="deps"><a href="#deps" class="headerlink" title="deps"></a><strong>deps</strong></h4><p>这个目录主要包含 Redis 所依赖的第三方代码库。</p>
+<ul>
+<li>Jemalloc，内存分配器，默认情况下选择该内存分配器来代替 Linux 系统的 libc-malloc，libc-malloc 性能不高，且碎片化严重。</li>
+<li>hiredis，这是官方 C 语言客户端。</li>
+<li>linenoise 是一种读线替换。它由 Redis 的 同一作者开发，但作为一个单独的项目进行管理，并根据需要进行更新。</li>
+<li>lua，顾名思义，就是 lua 相关的功能。</li>
+<li>hdr_histogram，用于生成每个命令的延迟跟踪直方图。</li>
+</ul>
+<h4 id="src-目录"><a href="#src-目录" class="headerlink" title="src 目录"></a><strong>src 目录</strong></h4><p>这是 Redis 源码的重要组成部分，里面有 <code>commands</code> 和 <code>modules</code> 两个子目录，其余功能模块的源码都在 src 目录下，这是最重要的目录。</p>
+<p><code>modules</code>目录包含了实现<code>Redis module</code>的示例代码，<code>commands</code>里面都是 json 格式的文件，包含了每个指令的元信息。</p>
+<h4 id="tests-目录"><a href="#tests-目录" class="headerlink" title="tests 目录"></a><strong>tests 目录</strong></h4><p>顾名思义，功能模块测试和单元测试的代码就在这里。</p>
+<ul>
+<li>cluster，Redis Cluster 功能测试。</li>
+<li>sentinel，哨兵集群功能测试。</li>
+<li>unit，单元测试。</li>
+<li>integration，主从复制功能测试。</li>
+</ul>
+<p>剩下的 assets、helpers、modules、support 四个目录中是用来支撑测试功能的。</p>
+<h4 id="utils-目录"><a href="#utils-目录" class="headerlink" title="utils 目录"></a><strong>utils 目录</strong></h4><p>辅助性功能的脚本或者代码，比如用于创建 Redis Cluster 的脚本，lru 算法效果展示代码等。</p>
+<p>除此之外，Redis 源码目录还有两个重要的文件，redis.conf 和 sentinel.conf，分别用于配置 Redis 实例运行和哨兵配置。</p>
+<blockquote>
+<p>tips:</p>
+<ol>
+<li><p>第一步，阅读源代码借助最好可以跟踪的工具去读。</p>
+</li>
+<li><p>第二步，搭建可以启动该源程序的环境，并能启动成功。</p>
+</li>
+<li><p>第三步，阅读代码前先理清楚源码的数据结构、基本概念、算法。</p>
+</li>
+<li><p>第四步，使用 debug 模式启动程序，跑完整个流程。</p>
+</li>
+<li><p>第五步，使用单元测试对数据结构、算法、流程进行单元测试。先整体后细节：对于复杂函数，不要上来就陷入细节，前期阅读只需了解这个函数大致做了什么事情，建立框架，等搭建起框架之后，再去填充细节。</p>
+</li>
+<li><p>先主线后支线：整个主线逻辑清晰之后，再去延伸阅读支线逻辑，因为支线逻辑肯定是服务主线逻辑的，读完主线后再去读这些支线，也会变得更简单。</p>
+</li>
+<li><p>查漏补缺：在工作中遇到具体问题，带着这些实际的问题出发再次去读源码，进行查漏补缺，填补之前读源码时没有注意到的地方。</p>
+</li>
+</ol>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://crisite.github.io/2023/10/06/Redis%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" data-id="clyxufjsa0017swm6533b6bvj" data-title="Redis源码分析" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/10/07/%E6%89%8B%E6%92%95LRU/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          手撕LRU
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/10/06/Redis%E7%9A%84%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">Redis的淘汰策略</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">-设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Application/" rel="tag">Application</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rabbitmq/" rel="tag">Rabbitmq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Security/" rel="tag">Spring Security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SqlServer/" rel="tag">SqlServer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/" rel="tag">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81/" rel="tag">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE/" rel="tag">项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">高并发分布式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">-设计模式</a> <a href="/tags/Application/" style="font-size: 10px;">Application</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 18.57px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Mysql/" style="font-size: 15.71px;">Mysql</a> <a href="/tags/RabbitMQ/" style="font-size: 10px;">RabbitMQ</a> <a href="/tags/Rabbitmq/" style="font-size: 10px;">Rabbitmq</a> <a href="/tags/Redis/" style="font-size: 17.14px;">Redis</a> <a href="/tags/Spring-Security/" style="font-size: 14.29px;">Spring Security</a> <a href="/tags/SpringBoot/" style="font-size: 17.14px;">SpringBoot</a> <a href="/tags/SqlServer/" style="font-size: 10px;">SqlServer</a> <a href="/tags/Windows/" style="font-size: 10px;">Windows</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/shell/" style="font-size: 11.43px;">shell</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 11.43px;">中间件</a> <a href="/tags/%E6%BA%90%E7%A0%81/" style="font-size: 14.29px;">源码</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 15.71px;">设计模式</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 12.86px;">项目</a> <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 15.71px;">高并发分布式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">July 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">June 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">December 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/07/01/nginx%E7%AE%80%E8%BF%B0/">nginx简述</a>
+          </li>
+        
+          <li>
+            <a href="/2024/07/01/%E6%98%BE%E7%A4%BA%E5%99%A8%E5%9C%A8%E4%B8%A4%E4%B8%AA%E8%BE%93%E5%85%A5%E6%BA%90%E4%B8%AD%E5%BF%AB%E9%80%9F%E5%88%87%E6%8D%A2/">显示器在两个输入源中快速切换</a>
+          </li>
+        
+          <li>
+            <a href="/2024/06/01/SSH%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/">SSH配置管理</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/22/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/">存储过程</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/22/Excel%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/">Excel常用函数</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 Crisite<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

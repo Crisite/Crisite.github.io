@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>锁详解 | Crisite の博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="看synchronized时深入一下Java锁相关的机制~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="锁详解">
+<meta property="og:url" content="https://crisite.github.io/2024/02/01/%E9%94%81%E8%AF%A6%E8%A7%A3/">
+<meta property="og:site_name" content="Crisite の博客">
+<meta property="og:description" content="看synchronized时深入一下Java锁相关的机制~">
+<meta property="og:locale">
+<meta property="og:image" content="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240202012453151.png">
+<meta property="og:image" content="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240202211044858.png">
+<meta property="og:image" content="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240202213447023.png">
+<meta property="og:image" content="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240203012538287.png">
+<meta property="article:published_time" content="2024-02-01T03:56:22.000Z">
+<meta property="article:modified_time" content="2024-02-02T17:49:22.000Z">
+<meta property="article:author" content="Crisite">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="高并发分布式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240202012453151.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Crisite の博客" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Crisite の博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Here&#39;s an blog...</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Suche"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://crisite.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-锁详解" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/02/01/%E9%94%81%E8%AF%A6%E8%A7%A3/" class="article-date">
+  <time class="dt-published" datetime="2024-02-01T03:56:22.000Z" itemprop="datePublished">2024-02-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      锁详解
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>看<code>synchronized</code>时深入一下Java锁相关的机制~</p>
+<span id="more"></span>
+
+<h1 id="Synchronized关键字"><a href="#Synchronized关键字" class="headerlink" title="Synchronized关键字"></a>Synchronized关键字</h1><h2 id="什么是synchronized"><a href="#什么是synchronized" class="headerlink" title="什么是synchronized"></a>什么是synchronized</h2><p>JDK官网对synchronized关键字有个解释</p>
+<blockquote>
+<p>Synchronized keyword enable a simple strategy for preventing thread interference and memory consistency errors: if an object is visible to more than one thread, all reads or writes to that object’s variables ard done through synchronized methods.</p>
+</blockquote>
+<p>上述解释的意思是：synchronized关键字可以实现一个简单的策略来防止线程干扰和内存一致性错误，如果一个对象对多个线程是可见的，那么对该对象的所有读或者写都将通过同步的方式来进行，具体表现如下：</p>
+<ul>
+<li>synchronized关键字提供了一种锁的机制，能够确保共享变量的互斥访问，从而防止数据不一致的问题出现。</li>
+<li>synchronized关键字包括<code>monitor enter</code>和<code>monitor exit</code>两个JVM指令，它能够保证在任何时候任何线程执行到<code>monitor enter</code>成功之前都必须从主内存中获取数据，而不是缓存中，在<code>monitor exit</code>运行成功之后，共享变量被更新后的值必须刷入主内存。</li>
+<li>synchronized的执行严格遵守<code>happens-before </code>规则，一个<code>monitor exit</code>指令之前必定要有一个<code>monitor enter</code>。</li>
+</ul>
+<h2 id="synchronized的用法"><a href="#synchronized的用法" class="headerlink" title="synchronized的用法"></a>synchronized的用法</h2><p>通常使用<code>synchronized</code>关键字来给一段代码或一个方法上锁。它通常有以下三种形式：（其实是两种：同步方法、同步方法块）</p>
+<pre><code class="java">// 关键字在实例方法上，锁为当前实例
+public synchronized void instanceLock() &#123;
+    // code
+&#125;
+
+// 关键字在静态方法上，锁为当前Class对象
+public static synchronized void classLock() &#123;
+    // code
+&#125;
+
+// 关键字在代码块上，锁为括号里面的对象 如果括号里面的对象为 *.class 那么它就仍然是一个类锁
+public void blockLock() &#123;
+    Object o = new Object();
+    synchronized (o) &#123;
+        // code
+    &#125;
+&#125;
+</code></pre>
+<p><strong>总结一下synchronized的使用效果</strong></p>
+<ul>
+<li><p>一把锁只能同时被一个线程获取，没有拿到锁的线程必须等待；</p>
+</li>
+<li><p>每个实例都对应有自己的一把锁，不同实例之间互不影响；</p>
+</li>
+<li><p>锁对象是*.class以及synchronized修饰的static方法时，所有对象共用一把类锁；</p>
+</li>
+<li><p>无论是方法正常执行完毕或者方法抛出异常，都会释放锁；</p>
+</li>
+<li><p>使用synchronized修饰的方法都是可重入的。（拿到了锁的线程可以重复进入被该锁锁定的代码块）</p>
+</li>
+</ul>
+<h2 id="synchronized的实现原理"><a href="#synchronized的实现原理" class="headerlink" title="synchronized的实现原理"></a>synchronized的实现原理</h2><h3 id="线程堆栈分析"><a href="#线程堆栈分析" class="headerlink" title="线程堆栈分析"></a>线程堆栈分析</h3><pre><code class="java">public class TestSync &#123;
+    private final static Object lock = new Object();
+    public void accessResource() &#123;
+        synchronized (lock) &#123;
+            try &#123;
+                TimeUnit.MINUTES.sleep(10);
+            &#125; catch (Exception e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;
+    &#125;
+    public static void main(String[] args) &#123;
+        TestSync testSync = new TestSync();
+        for (int i = 0; i &lt; 3; i++) &#123;
+            new Thread(testSync::accessResource).start();
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>在上述代码中，创建了三个线程去执行<code>accessResource()</code>方法，在获得锁后会线程会进入等待状态，其他线程则阻塞等待解锁。</p>
+<p>代码运行时，通过<code>top</code>命令查询所有进程信息，使用<code>COMMAND=java</code>筛选出需要查询的Java线程，找到线程的pid，然后执行<code>jstack + pid</code>，就可以查看堆栈信息，如图：</p>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240202012453151.png" alt="image-20240202012453151"></p>
+<p>可以看到线程<code>Thread-0</code>持有了锁<code>&lt;0x00000000d7fbdce0&gt;</code>并且处于<code>TIMED_WAITING</code>等待状态，而另外两个线程则进入了阻塞状态。</p>
+<h3 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h3><p>将编译出来的<code>TextSync.class</code>反编译，执行<code>javap -c TextSync.class &gt; TextSync.txt</code>将Java类文件中的字节码以文本形式显示出来。</p>
+<pre><code class="java">  public void accessResource();
+    Code:
+       0: getstatic     #2                  // 1. 获取锁 // Field lock:Ljava/lang/Object;
+       3: dup
+       4: astore_1
+       5: monitorenter						// 2. 执行monitor enter JVM指令
+       6: getstatic     #3                  // Field java/util/concurrent/TimeUnit.MINUTES:Ljava/util/concurrent/TimeUnit;
+       9: ldc2_w        #4                  // long 10l
+      12: invokevirtual #6                  // Method java/util/concurrent/TimeUnit.sleep:(J)V
+      15: goto          23					// 3. 休眠结束后跳转23行
+      18: astore_2
+      19: aload_2
+      20: invokevirtual #8                  // Method java/lang/Exception.printStackTrace:()V
+      23: aload_1
+      24: monitorexit						// 4. 执行monitor exit JVM指令
+      25: goto          33
+      28: astore_3
+      29: aload_1
+      30: monitorexit
+      31: aload_3
+      32: athrow
+      33: return
+</code></pre>
+<p>首先①获取到lock引用，然后执行②monitorenter JVM指令，休眠结束后goto至③monitorexit的位置 （astore_n表示存储引用到本地变量表；aload_n表示从本地变量表加载应用；getstatic表示从class中获取静态属性）</p>
+<h4 id="monitor-enter和monitor-exit"><a href="#monitor-enter和monitor-exit" class="headerlink" title="monitor enter和monitor exit"></a>monitor enter和monitor exit</h4><blockquote>
+<p>每一个对象都与一个monitor相关联，一个monitor的lock的锁只能被一个线程在同一时间获得，在一个线程尝试获得与对象关联的monitor的所有权时会发生如下的几件事情。</p>
+</blockquote>
+<p><strong>monitor enter</strong>：</p>
+<ol>
+<li>如果某对象monitor计数器为0，则表示该monitor还没有被获得，当某个线程执行<code>monitor enter</code>时，monitor计数器就会加1，该线程就成为了该对象的monitor的所有者。</li>
+<li>如果一个拥有该monitor的线程重入（重入的目标该怎么说呢？对象？），则该monitor计数器累加。</li>
+<li>如果monitor已经被其他线程拥有，则线程尝试获取该monitor时，会进入阻塞状态（也可能自旋等待一会？）直到monitor重新为0。</li>
+</ol>
+<p><strong>monitor exit</strong>：</p>
+<ol>
+<li>根据<code>happens before</code>原则，执行<code>monitor exit</code>前必须有执行过一次<code>monitor entor</code></li>
+<li>每次执行<code>monitor exit</code>都会将monitor计数器减一，当结果为0则解锁。</li>
+</ol>
+<h1 id="Mark-Word"><a href="#Mark-Word" class="headerlink" title="Mark Word"></a>Mark Word</h1><p>上文中的monitor实际上是存储在对象头中，对象在内存中存储的数据包括： 对象头、实例数据、对齐填充Padding，其中对象头包括Mark Word和类型指针。类型指针指向对象的类元数据metadata，虚拟机通过这个指针确定该对象是哪个类的实例。Mark Word用于存储对象自身的运行时数据，如下以64位虚拟机为例：</p>
+<table>
+<thead>
+<tr>
+<th>Mark Word (64 bits)</th>
+<th>State 锁状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>unused:25 identity_hashcode:31 unused:1 age:4 biased_lock:1 lock:2</td>
+<td>Normal 无锁</td>
+</tr>
+<tr>
+<td>thread:54  epoch:2 unused:1 age:4 biased_lock:1 lock:2</td>
+<td>Biased 偏向锁</td>
+</tr>
+<tr>
+<td>ptr_to_lock_record:62                  lock:2</td>
+<td>Lightweight Locked 轻量级锁</td>
+</tr>
+<tr>
+<td>ptr_to_heavyweight_monitor:62          lock:2</td>
+<td>Heavyweight Locked 重量级锁</td>
+</tr>
+<tr>
+<td>lock:2</td>
+<td>Marked for GC GC标记</td>
+</tr>
+</tbody></table>
+<p>上文的表格表示的即是在不同的状态下Mark Word所保存的对象信息</p>
+<ul>
+<li>identity_hashcode:25：这是对象的哈希码，用于在哈希表等数据结构中定位对象。</li>
+<li>age:4：对象年龄，用于垃圾回收中的分代算法。</li>
+<li>biased_lock:1：表示对象是否偏向锁定，1 代表已经偏向锁定，0 代表未偏向锁定。</li>
+<li>lock:2：表示对象的锁状态，不同的数值代表不同的锁状态，比如 0 表示无锁状态，1 表示偏向锁状态，2 表示轻量级锁状态，等等</li>
+<li>thread:54：持有偏向锁的线程 ID。</li>
+<li>epoch:2：偏向锁的时间戳，用于撤销偏向锁。</li>
+<li>ptr_to_lock_record:62：指向锁记录的指针。</li>
+<li>ptr_to_heavyweight_monitor:62：指向重量级锁监视器的指针。</li>
+</ul>
+<p><strong>锁状态：</strong></p>
+<table>
+<thead>
+<tr>
+<th>biased_lock</th>
+<th>lock</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>01</td>
+<td>无锁</td>
+</tr>
+<tr>
+<td>1</td>
+<td>01</td>
+<td>偏向锁</td>
+</tr>
+<tr>
+<td>0</td>
+<td>00</td>
+<td>轻量级锁</td>
+</tr>
+<tr>
+<td>0</td>
+<td>10</td>
+<td>重量级锁</td>
+</tr>
+<tr>
+<td>0</td>
+<td>11</td>
+<td>GC标记</td>
+</tr>
+</tbody></table>
+<h1 id="几种锁"><a href="#几种锁" class="headerlink" title="几种锁"></a>几种锁</h1><h2 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h2><p>Hotspot的作者经过以往的研究发现大多数情况下<strong>锁不仅不存在多线程竞争，而且总是由同一线程多次获得</strong>，于是引入了偏向锁。</p>
+<p>偏向锁会偏向于第一个访问锁的线程，如果在接下来的运行过程中，该锁没有被其他的线程访问，则持有偏向锁的线程将永远不需要触发同步。也就是说，<strong>偏向锁在资源无竞争情况下消除了同步语句，连CAS操作都不做了，提高了程序的运行性能。</strong>(有个偏向锁标志，如果为true，就不需要进行各种加锁&#x2F;解锁流程)</p>
+<p><strong>实现原理</strong></p>
+<p>一个线程在第一次进入同步块时，会在对象头和栈帧中的锁记录里存储锁的偏向的线程ID。当下次该线程进入这个同步块时，会去检查锁的Mark Word里面是不是放的自己的线程ID。</p>
+<ul>
+<li>如果是，表明该线程已经获得了锁，以后该线程在进入和退出同步块时不需要花费CAS操作来加锁和解锁</li>
+<li>如果不是，就代表有另一个线程来竞争这个偏向锁。这个时候会尝试使用CAS来替换Mark Word里面的线程ID为新线程的ID，这个时候要分两种情况：<ul>
+<li>成功，表示之前的线程不存在了， Mark Word里面的线程ID为新线程的ID，锁不会升级，仍然为偏向锁；</li>
+<li>失败，表示之前的线程仍然存在，那么暂停之前的线程，设置偏向锁标识为0，并设置锁标志位为00，升级为轻量级锁，会按照轻量级锁的方式进行竞争锁。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>偏向锁实际上是无锁竞争下的可重入锁的简单实现（）</p>
+</blockquote>
+<p><strong>撤销偏向锁</strong></p>
+<p>偏向锁使用了一种<strong>等到竞争出现才释放锁的机制</strong>，所以当其他线程尝试竞争偏向锁时， 持有偏向锁的线程才会释放锁。偏向锁升级成轻量级锁时，会暂停拥有偏向锁的线程，重置偏向锁标识这个过程也是有一定开销的，具体流程如下：</p>
+<ol>
+<li>在一个安全点（在这个时间点上没有字节码正在执行）停止拥有锁的线程。</li>
+<li>遍历线程栈，如果存在锁记录的话，需要修复锁记录和Mark Word，使其变成无锁状态。</li>
+<li>唤醒被停止的线程，将当前锁升级成轻量级锁。</li>
+</ol>
+<p>所以，如果应用程序里所有的锁通常处于竞争状态，那么偏向锁就会是一种累赘，对于这种情况，我们可以一开始就把偏向锁这个默认功能给关闭：<code>-XX:UseBiasedLocking=false。</code></p>
+<h2 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h2><p>JVM会为每个线程在当前线程的栈帧中创建用于存储锁记录的空间，我们称为Displaced Mark Word。如果一个线程获得锁的时候发现是轻量级锁，会把锁的Mark Word复制到自己的Displaced Mark Word里面。</p>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240202211044858.png" alt="image-20240202211044858"></p>
+<p>当线程第一次加锁时，将入栈一个Lock Record，这个Lock Record将包含锁对象的Mark Word（displaced word）副本以及指向锁对象的指针；</p>
+<p>当线程重入锁时，同样入栈一个Lock Record，这个Lock Record将包含一个为null的displaced word（标识为重入）以及指向锁对象的指针</p>
+<p><strong>轻量级锁加锁的过程</strong>：</p>
+<ol>
+<li>复制锁对象的<code>Mark Word</code>到所记录的Displaced Word中</li>
+<li>通过CAS将锁对象的<code>Mark Word</code>中的信息（ptr_to_lock_record）设置为指向栈帧中锁记录的指针</li>
+<li>修改锁状态为<code>00</code></li>
+<li>将栈帧中锁记录的Obj指向锁对象</li>
+</ol>
+<p>其中如果CAS失败，则表示已经有线程获得了锁，那么就尝试自旋获取锁（适应性自旋），如果自旋到一定程度，依然没有获取到锁，称为自旋失败，那么这个线程会阻塞。同时这个锁就会<strong>升级成重量级锁</strong>。</p>
+<p><strong>轻量级锁解锁的过程</strong>：</p>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240202213447023.png" alt="image-20240202213447023"></p>
+<h2 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h2><p>重量级锁依赖于操作系统的互斥量（mutex） 实现的，而操作系统中线程间状态的转换需要相对比较长的时间，所以重量级锁效率很低，但被阻塞的线程不会消耗CPU。</p>
+<p>(不知道看啥，跳过跳过)</p>
+<h1 id="锁升级流程"><a href="#锁升级流程" class="headerlink" title="锁升级流程"></a>锁升级流程</h1><p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240203012538287.png" alt="image-20240203012538287"></p>
+<h1 id="各种锁的优缺点对比"><a href="#各种锁的优缺点对比" class="headerlink" title="各种锁的优缺点对比"></a>各种锁的优缺点对比</h1><table>
+<thead>
+<tr>
+<th>锁</th>
+<th>优点</th>
+<th>缺点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>偏向锁</td>
+<td>加锁和解锁不需要额外的消耗，和执行非同步方法比仅存在纳秒级的差距。</td>
+<td>如果线程间存在锁竞争，会带来额外的锁撤销的消耗。</td>
+<td>适用于只有一个线程访问同步块场景。</td>
+</tr>
+<tr>
+<td>轻量级锁</td>
+<td>竞争的线程不会阻塞，提高了程序的响应速度。</td>
+<td>如果始终得不到锁竞争的线程使用自旋会消耗CPU。</td>
+<td>追求响应时间。同步块执行速度非常快。</td>
+</tr>
+<tr>
+<td>重量级锁</td>
+<td>线程竞争不使用自旋，不会消耗CPU。</td>
+<td>线程阻塞，响应时间缓慢。</td>
+<td>追求吞吐量。同步块执行时间较长。</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p>  <strong>参考资料：</strong></p>
+<p>第13章 线程安全与锁优化–《深入理解Java虚拟机》</p>
+<p><a target="_blank" rel="noopener" href="http://concurrent.redspider.group/article/02/9.html">synchronized与锁</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/charlesblc/p/5994162.html">Java中的锁机制 synchronized &amp; 偏向锁 &amp; 轻量级锁 &amp; 重量级锁 &amp; 各自优缺点及场景 &amp; AtomicReference </a></p>
+<p><a target="_blank" rel="noopener" href="https://www.infoq.cn/article/java-se-16-synchronized/">聊聊并发（二）——Java SE1.6 中的 Synchronized</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903757709312014">深入理解synchronized关键字</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/sermonlizhi/article/details/122509192">深入理解Synchronized(三)</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://crisite.github.io/2024/02/01/%E9%94%81%E8%AF%A6%E8%A7%A3/" data-id="clyxufjsq004aswm6e7be3epw" data-title="锁详解" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">高并发分布式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/02/05/%E4%B9%90%E8%A7%82%E9%94%81%E5%92%8C%E6%82%B2%E8%A7%82%E9%94%81/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          乐观锁和悲观锁
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/01/31/volatile%E5%85%B3%E9%94%AE%E5%AD%97/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">volatile关键字</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">-设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Application/" rel="tag">Application</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/" rel="tag">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ/" rel="tag">RabbitMQ</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rabbitmq/" rel="tag">Rabbitmq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Security/" rel="tag">Spring Security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/" rel="tag">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SqlServer/" rel="tag">SqlServer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Windows/" rel="tag">Windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81/" rel="tag">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE/" rel="tag">项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">高并发分布式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">-设计模式</a> <a href="/tags/Application/" style="font-size: 10px;">Application</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 18.57px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Mysql/" style="font-size: 15.71px;">Mysql</a> <a href="/tags/RabbitMQ/" style="font-size: 10px;">RabbitMQ</a> <a href="/tags/Rabbitmq/" style="font-size: 10px;">Rabbitmq</a> <a href="/tags/Redis/" style="font-size: 17.14px;">Redis</a> <a href="/tags/Spring-Security/" style="font-size: 14.29px;">Spring Security</a> <a href="/tags/SpringBoot/" style="font-size: 17.14px;">SpringBoot</a> <a href="/tags/SqlServer/" style="font-size: 10px;">SqlServer</a> <a href="/tags/Windows/" style="font-size: 10px;">Windows</a> <a href="/tags/linux/" style="font-size: 20px;">linux</a> <a href="/tags/shell/" style="font-size: 11.43px;">shell</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 11.43px;">中间件</a> <a href="/tags/%E6%BA%90%E7%A0%81/" style="font-size: 14.29px;">源码</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 15.71px;">设计模式</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 10px;">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 12.86px;">项目</a> <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 15.71px;">高并发分布式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/07/">July 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">June 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/01/">January 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">December 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/10/">October 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/07/01/nginx%E7%AE%80%E8%BF%B0/">nginx简述</a>
+          </li>
+        
+          <li>
+            <a href="/2024/07/01/%E6%98%BE%E7%A4%BA%E5%99%A8%E5%9C%A8%E4%B8%A4%E4%B8%AA%E8%BE%93%E5%85%A5%E6%BA%90%E4%B8%AD%E5%BF%AB%E9%80%9F%E5%88%87%E6%8D%A2/">显示器在两个输入源中快速切换</a>
+          </li>
+        
+          <li>
+            <a href="/2024/06/01/SSH%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86/">SSH配置管理</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/22/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/">存储过程</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/22/Excel%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/">Excel常用函数</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 Crisite<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
