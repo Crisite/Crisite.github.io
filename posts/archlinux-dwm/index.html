@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en"
+  x-data
+  :class="$store.darkMode.class()"
+  :data-theme="$store.darkMode.theme()">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArchLinux&#43;dwm | crisite&#39;s blog</title>
+
+    
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+
+
+
+<meta name="author" content="泡芙" />
+<meta name="description" content="之前装arch和dwm的时候都没有记录，现在慢慢更新对dwm的定制优化吧
+" />
+
+
+<link rel="canonical" href="https://example.com/posts/archlinux-dwm/" />
+
+
+<meta property="og:url" content="https://example.com/posts/archlinux-dwm/">
+  <meta property="og:site_name" content="crisite&#39;s blog">
+  <meta property="og:title" content="ArchLinux&#43;dwm">
+  <meta property="og:description" content="之前装arch和dwm的时候都没有记录，现在慢慢更新对dwm的定制优化吧">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-10-06T14:25:29+00:00">
+    <meta property="article:modified_time" content="2023-10-06T14:25:29+00:00">
+    <meta property="article:tag" content="Linux">
+    <meta property="og:image" content="https://example.com/img/redhair.jpg">
+
+
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://example.com/img/redhair.jpg">
+  <meta name="twitter:title" content="ArchLinux&#43;dwm">
+  <meta name="twitter:description" content="之前装arch和dwm的时候都没有记录，现在慢慢更新对dwm的定制优化吧">
+
+
+
+<meta name="generator" content="Hugo 0.129.0">
+
+<link rel="stylesheet" href="/css/output.css" />
+
+<style>
+
+#dream-global-bg {
+  background-image: url(/img/background.png);
+}
+
+
+
+html.dark #dream-global-bg {
+  background-image: url(/img/background_dark.jpg);
+}
+
+</style>
+
+
+    
+
+
+
+
+
+
+
+    
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+
+  <body x-data="{
+    flip: false,
+  }">
+    
+    <div id="dream-global-bg"></div>
+
+    
+<nav class="mt-4 lg:mt-8 pt-4 pb-4">
+
+  <div class="container flex justify-between px-4">
+    <section class="flex items-center gap-4">
+      <div class="avatar cursor-pointer hover:online" @click="flip = !flip" title="翻转！">
+        <div class="h-10 rounded-full">
+          <img src="/img/avatar.png" alt="Hugo Theme Dream" />
+        </div>
+      </div>
+
+      
+      <div>
+        
+        <a href="https://example.com/" class="text-lg font-semibold cursor-pointer">
+          Hugo Theme Dream
+        </a>
+        
+        
+      </div>
+      
+    </section>
+
+    <div class="dropdown dropdown-end sm:hidden">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-square">
+        <ion-icon name="menu-outline" size="large"></ion-icon>
+      </div>
+      <ul tabindex="0" class="dropdown-content menu w-36 bg-base-100 rounded-box z-[1] shadow-md">
+        
+
+
+<li>
+  <div role="link" tabindex="0" class="inline-flex items-center p-2 cursor-pointer" @click="flip = !flip" title="关于">
+    <ion-icon name="information-circle"></ion-icon>关于</div>
+</li>
+
+
+
+
+<li>
+  <a class="group inline-flex items-center p-2 cursor-pointer" href="/search" title="搜索">
+    <ion-icon name="search"></ion-icon>
+    搜索
+  </a>
+</li>
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/posts" title="归档">
+    <ion-icon name="archive"></ion-icon>
+    归档
+  </a>
+</li>
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/categories" title="所有分类">
+    <ion-icon name="grid"></ion-icon>
+    所有分类
+  </a>
+</li>
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/tags" title="所有标签">
+    <ion-icon name="pricetags"></ion-icon>
+    所有标签
+  </a>
+</li>
+
+
+
+
+      </ul>
+    </div>
+    <section class="hidden sm:flex sm:items-center sm:gap-2 md:gap-4">
+      
+      
+      
+      <div role="link" tabindex="0" class="text-sm font-semibold cursor-pointer hover:underline" @click="flip = !flip" title="关于">关于</div>
+      
+      
+
+      
+      <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/search" title="搜索">
+        <ion-icon class="group-hover:text-primary-content" name="search"></ion-icon>
+      </a>
+      
+
+      
+      <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/posts" title="归档">
+        <ion-icon class="group-hover:text-primary-content" name="archive"></ion-icon>
+      </a>
+      
+
+      
+      <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/categories" title="所有分类">
+        <ion-icon class="group-hover:text-primary-content" name="grid"></ion-icon>
+      </a>
+      
+
+      
+      <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/tags" title="所有标签">
+        <ion-icon class="group-hover:text-primary-content" name="pricetags"></ion-icon>
+      </a>
+      
+
+      
+    </section>
+  </div>
+</nav>
+
+
+    <div class="flip-container" :class="{ 'flip-it': flip }">
+      <div class="flipper">
+        <div class="front">
+          <div class="container">
+            
+<div class="mt-4 px-4">
+  <article class="mx-auto prose dark:prose-invert" id="dream-single-page">
+    <header>
+      <h1>ArchLinux&#43;dwm</h1>
+      <p class="text-sm">
+        
+          
+            星期五，十月 6 日，2023 年
+          
+        
+
+        | <span>1 分钟阅读</span>
+
+        
+        | <span>更新于
+          
+            
+              星期五，十月 6 日，2023 年
+            
+          </span>
+        
+      </p>
+      <div class="flex justify-between">
+        <div class="flex items-center">
+  
+  <div class="avatar mr-1">
+    <div class="w-8 rounded-full">
+      <img class="my-0" src="/img/avatar.png" />
+    </div>
+  </div>
+  
+
+  <span>
+  
+    
+      泡芙
+    
+  
+  </span>
+</div>
+
+
+        <span class="flex items-center gap-2">
+  <a class="group inline-flex items-center p-2 text-sm rounded-full cursor-pointer hover:bg-primary" href="https://twitter.com/intent/tweet?text=ArchLinux%2bdwm&url=https%3a%2f%2fexample.com%2fposts%2farchlinux-dwm%2f" title="Share on X">
+    <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
+  </a>
+  <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fexample.com%2fposts%2farchlinux-dwm%2f" title="Share on Facebook">
+    <ion-icon class="group-hover:text-primary-content" name="logo-facebook"></ion-icon>
+  </a>
+</span>
+
+      </div>
+    </header>
+
+    
+
+    <p>之前装arch和dwm的时候都没有记录，现在慢慢更新对dwm的定制优化吧</p>
+<h2 id="换源">换源</h2>
+<p><code>yarn</code> <code>npm</code> <code>yay</code>都要记得换源</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># yarn</span>
+</span></span><span style="display:flex;"><span>yarn config set registry https://registry.npm.taobao.org
+</span></span></code></pre></div><h2 id="软件安装">软件安装</h2>
+<h3 id="截图">截图</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>yay -S flameshot
+</span></span><span style="display:flex;"><span>vim /opt/dwm6.4/config.h
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>flame[] <span style="color:#f92672">=</span> { <span style="color:#e6db74">&#34;flameshot&#34;</span>, <span style="color:#e6db74">&#34;gui&#34;</span>, NULL };  <span style="color:#75715e">//flameshot 截图工具
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> key keys[] <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    .....
+</span></span><span style="display:flex;"><span>	{ MODKEY<span style="color:#f92672">|</span>ShiftMask,             XK_a,      spawn,          {.v <span style="color:#f92672">=</span> flame } },
+</span></span><span style="display:flex;"><span>    ......
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>flameshot</code>命令</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Arguments:
+</span></span><span style="display:flex;"><span>  gui            Start a manual capture in GUI mode.
+</span></span><span style="display:flex;"><span>  screen         Capture a single screen.
+</span></span><span style="display:flex;"><span>  full           Capture the entire desktop.
+</span></span><span style="display:flex;"><span>  launcher       Open the capture launcher.
+</span></span><span style="display:flex;"><span>  config         Configure flameshot.
+</span></span></code></pre></div><h4 id="腾讯会议">腾讯会议</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>yay -S wemeet-bin
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 记得要先yay -Syu 同步一下源</span>
+</span></span></code></pre></div><h2 id="窗口透明度">窗口透明度</h2>
+<ol>
+<li>
+<p>打<code>dwm-alpha</code>补丁</p>
+</li>
+<li>
+<p>安装<code>picom</code></p>
+</li>
+<li>
+<p><code>Pacman</code>下载<code>xorg-xprop</code></p>
+</li>
+<li>
+<p>复制<code>/etc/xdg/picom.conf.example</code>到<code>~/.config/picom/picom.conf</code>(自己创建)</p>
+</li>
+<li>
+<p>配置</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>opacity-rule <span style="color:#f92672">=</span> <span style="color:#f92672">[</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#e6db74">&#34;100:class_g = &#39;microsoft-edge-dev&#39;&#34;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>wintypes:
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  normal <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> fade <span style="color:#f92672">=</span> true; shadow <span style="color:#f92672">=</span> true; opacity <span style="color:#f92672">=</span> 0.95; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  tooltip <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> fade <span style="color:#f92672">=</span> true; shadow <span style="color:#f92672">=</span> true; opacity <span style="color:#f92672">=</span> 0.10; focus <span style="color:#f92672">=</span> true; full-shadow <span style="color:#f92672">=</span> false; <span style="color:#f92672">}</span>;
+</span></span><span style="display:flex;"><span>  dock <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> shadow <span style="color:#f92672">=</span> false; clip-shadow-above <span style="color:#f92672">=</span> true; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  dnd <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> shadow <span style="color:#f92672">=</span> false; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  popup_menu <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> opacity <span style="color:#f92672">=</span> 0.8; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  dropdown_menu <span style="color:#f92672">=</span> <span style="color:#f92672">{</span> opacity <span style="color:#f92672">=</span> 0.8; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>;
+</span></span></code></pre></div></li>
+</ol>
+<blockquote>
+<p>其中<code>opaciry-rule</code>配置不同窗口的透明度规则，通过<code>xprop</code>确认不同窗口的<code>WM_CLASS</code>，其他的属性自己多试试应该也能懂什么意思</p>
+</blockquote>
+<h2 id="软件报错">软件报错</h2>
+<p><code>WPS</code>正常启动并使用，但是<code>wpspdf</code>无法使用报错，找不到库文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dlopen /usr/lib/office6/libpdfmain.so failed , error: libtiff.so.5: 无法打开共享对象文件: 没有那个文件或目录
+</span></span></code></pre></div><p>解决方式</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 先找到系统内的libtiff.so文件 arch将libtiff更新到了6.0.2</span>
+</span></span><span style="display:flex;"><span>sudo find / -name <span style="color:#e6db74">&#39;*libtiff*&#39;</span>  
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建软连接</span>
+</span></span><span style="display:flex;"><span>sudo ln -s /usr/lib/libtiff.so.6.0.2 /usr/lib/libtiff.so.5
+</span></span></code></pre></div><p>ok之后就可以正常使用了</p>
+<blockquote>
+<p><a href="https://www.reddit.com/register">https://www.reddit.com/register</a></p>
+</blockquote>
+<p>java线程池</p>
+<p>事务失效的场景</p>
+<p>为什么索引会失效</p>
+<p>AOP：</p>
+<p>bean的作用域</p>
+  </article>
+
+  
+
+  
+
+  <section class="max-w-[65ch] mx-auto space-y-4">
+    
+
+    
+
+    
+  </section>
+</div>
+
+
+            <footer class="flex justify-between items-center gap-2 px-4 py-12">
+              <div>
+  
+  <p>
+    © 2016 - 2024 crisite&#39;s blog
+  </p>
+  
+
+  
+  <p class="text-sm">
+    🌱
+    <span class="text-base-content/60">
+      Powered by <a class="hover:underline" href="https://gohugo.io/" target="_blank">Hugo</a> with theme
+      <a class="hover:underline" href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</span
+    >
+  </p>
+  
+</div>
+
+              <div
+  x-data="{ icons: [
+    { name: 'moon', status: 'y' },
+    { name: 'sunny', status: 'n' },
+    { name: 'desktop', status: 'auto' }
+  ] }"
+  class="flex items-center h-[32px] px-2 gap-2 border border-base-300 rounded-full"
+>
+  <template x-for="icon in icons">
+    <div
+      role="button"
+      tabindex="0"
+      class="group inline-flex justify-center items-center p-1 rounded-full cursor-pointer hover:bg-primary"
+      :class="$store.darkMode.icon() === icon.name && 'bg-primary'"
+      @click="$store.darkMode.toggle(icon.status)"
+    >
+      <ion-icon
+        :name="`${icon.name}-outline`"
+        class="group-hover:text-primary-content"
+        :class="$store.darkMode.icon() === icon.name && 'text-primary-content'"
+      >
+      </ion-icon>
+    </div>
+  </template>
+</div>
+
+            </footer>
+          </div>
+        </div>
+        <div class="back">
+          <div class="container">
+            <div class="dream-grid">
+  
+  
+  
+  <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 dream-column">
+    <article
+      class="card card-compact bg-base-100 hover:bg-base-content/10 shadow-xl dark:border dark:border-base-content/30"
+    >
+      <div class="card-body">
+        <div class="card-title">Me</div>
+
+        <div class="prose dark:prose-invert">
+          <p>a poor Programmer</p>
+<p>nothing.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+  
+  
+
+  
+
+  
+  
+</div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+  window.lightTheme = "emerald"
+  window.darkTheme = "forest"
+
+  window.hasTwitterEmbed =  null 
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+<script src="/js/grid.js"></script>
+<script src="/js/main.js"></script>
+
+    
+
+
+
+
+
+
+
+    
+
+    
+
+    <script type="module" src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js"></script>
+  </body>
+</html>
