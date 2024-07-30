@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on crisite&#39;s blog</title>
-    <link>http://localhost:1313/categories/</link>
+    <link>http://localhost:49801/categories/</link>
     <description>Recent content in Categories on crisite&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en</language>
     <lastBuildDate>Mon, 29 Jul 2024 21:49:54 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:49801/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>美化</title>
-      <link>http://localhost:1313/categories/%E7%BE%8E%E5%8C%96/</link>
+      <link>http://localhost:49801/categories/%E7%BE%8E%E5%8C%96/</link>
       <pubDate>Mon, 29 Jul 2024 21:49:54 +0800</pubDate>
-      <guid>http://localhost:1313/categories/%E7%BE%8E%E5%8C%96/</guid>
+      <guid>http://localhost:49801/categories/%E7%BE%8E%E5%8C%96/</guid>
       <description></description>
     </item>
     <item>
       <title>Category1</title>
-      <link>http://localhost:1313/categories/category1/</link>
+      <link>http://localhost:49801/categories/category1/</link>
       <pubDate>Mon, 29 Jul 2024 19:52:22 +0800</pubDate>
-      <guid>http://localhost:1313/categories/category1/</guid>
+      <guid>http://localhost:49801/categories/category1/</guid>
       <description></description>
     </item>
   </channel>
