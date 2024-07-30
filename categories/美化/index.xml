@@ -16,6 +16,13 @@
       <description>&lt;p&gt;使用 &lt;code&gt;Komorebic+Yasb&lt;/code&gt; 在 &lt;code&gt;Windows&lt;/code&gt; 中也获得类似 &lt;code&gt;dwm&lt;/code&gt; 的平铺式窗口的能力&lt;/p&gt;</description>
     </item>
     <item>
+      <title>SSH配置管理</title>
+      <link>http://localhost:1313/posts/ssh-configmanager/</link>
+      <pubDate>Sat, 01 Jun 2024 00:37:38 +0000</pubDate>
+      <guid>http://localhost:1313/posts/ssh-configmanager/</guid>
+      <description>&lt;p&gt;SSH配置管理&lt;/p&gt;</description>
+    </item>
+    <item>
       <title>ArchLinux&#43;dwm</title>
       <link>http://localhost:1313/posts/archlinux-dwm/</link>
       <pubDate>Fri, 06 Oct 2023 14:25:29 +0000</pubDate>

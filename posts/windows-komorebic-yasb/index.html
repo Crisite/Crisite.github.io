@@ -66,6 +66,13 @@ html.dark #dream-global-bg {
     
 
 
+<style>
+  pre {
+    padding: 1em;
+    overflow: auto;
+  }
+</style>
+
 
 
 
@@ -83,7 +90,7 @@ html.dark #dream-global-bg {
     <div id="dream-global-bg"></div>
 
     
-<nav class="mt-4 lg:mt-8 pt-4 pb-4">
+<nav class="mt-4 lg:mt-8 py-4">
 
   <div class="container flex justify-between px-4">
     <section class="flex items-center gap-4">
@@ -204,29 +211,33 @@ html.dark #dream-global-bg {
           <div class="container">
             
 <div class="mt-4 px-4">
-  <article class="mx-auto prose dark:prose-invert" id="dream-single-page">
-    <header>
-      <h1>Windows&#43;Komorebic&#43;Yasb</h1>
-      <p class="text-sm">
-        
-          
-            星期一，七月 29 日，2024 年
-          
-        
-
-        | <span>1 分钟阅读</span>
-
-        
-        | <span>更新于
+  
+  <div>
+  
+    
+    <article class="mx-auto prose dark:prose-invert" id="crisite-single-post-main">
+      <header>
+        <h1>Windows&#43;Komorebic&#43;Yasb</h1>
+        <p class="text-sm">
           
             
               星期一，七月 29 日，2024 年
             
-          </span>
-        
-      </p>
-      <div class="flex justify-between">
-        <div class="flex items-center">
+          
+
+          | <span>1 分钟阅读</span>
+
+          
+          | <span>更新于
+            
+              
+                星期一，七月 29 日，2024 年
+              
+            </span>
+          
+        </p>
+        <div class="flex justify-between">
+          <div class="flex items-center">
   
   <div class="avatar mr-1">
     <div class="w-8 rounded-full">
@@ -245,7 +256,7 @@ html.dark #dream-global-bg {
 </div>
 
 
-        <span class="flex items-center gap-2">
+          <span class="flex items-center gap-2">
   <a class="group inline-flex items-center p-2 text-sm rounded-full cursor-pointer hover:bg-primary" href="https://twitter.com/intent/tweet?text=Windows%2bKomorebic%2bYasb&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fwindows-komorebic-yasb%2f" title="Share on X">
     <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
   </a>
@@ -254,12 +265,12 @@ html.dark #dream-global-bg {
   </a>
 </span>
 
-      </div>
-    </header>
+        </div>
+      </header>
 
-    
+      
 
-    <p>使用 <code>Komorebic+Yasb</code> 在 <code>Windows</code> 中也获得类似 <code>dwm</code> 的平铺式窗口的能力</p>
+      <p>使用 <code>Komorebic+Yasb</code> 在 <code>Windows</code> 中也获得类似 <code>dwm</code> 的平铺式窗口的能力</p>
 <h3 id="下载-komorebic-和-yasb">下载 <code>Komorebic</code> 和 <code>Yasb</code></h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># komorebi</span>
 </span></span><span style="display:flex;"><span>winget install LGUG2Z.komorebi
@@ -293,12 +304,11 @@ html.dark #dream-global-bg {
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>@echo off
 </span></span><span style="display:flex;"><span>komorebic start --whkd
 </span></span><span style="display:flex;"><span>start <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#e6db74">&#34;pythonw&#34;</span> <span style="color:#e6db74">&#34;D:\yasb\src\main.py&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 开机自启动博客的本地服务</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">#启动一个新的 PowerShell 进程，并且不会在执行完命令后退出（-NoExit），同时窗口样式设置为隐藏（-WindowStyle Hidden</span>
-</span></span><span style="display:flex;"><span>Start-Process powershell -ArgumentList <span style="color:#e6db74">&#34;-NoExit&#34;</span>, <span style="color:#e6db74">&#34;hugo server --source E:\project\blog&#34;</span> -WindowStyle Hidden
 </span></span></code></pre></div>
-  </article>
+
+      
+    </article>
+  </div>
 
   
 
