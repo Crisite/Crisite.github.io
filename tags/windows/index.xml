@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Windows on crisite&#39;s blog</title>
-    <link>http://localhost:49801/tags/windows/</link>
+    <link>http://localhost:1313/tags/windows/</link>
     <description>Recent content in Windows on crisite&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en</language>
     <lastBuildDate>Tue, 30 Jul 2024 15:01:14 +0800</lastBuildDate>
-    <atom:link href="http://localhost:49801/tags/windows/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/windows/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ps1脚本签名</title>
-      <link>http://localhost:49801/posts/ps1-script-signature/</link>
+      <link>http://localhost:1313/posts/ps1-script-signature/</link>
       <pubDate>Tue, 30 Jul 2024 15:01:14 +0800</pubDate>
-      <guid>http://localhost:49801/posts/ps1-script-signature/</guid>
+      <guid>http://localhost:1313/posts/ps1-script-signature/</guid>
       <description>&lt;p&gt;因为 &lt;code&gt;Win11&lt;/code&gt; 下的 &lt;code&gt;PowerShell&lt;/code&gt; 相对 &lt;code&gt;cmd&lt;/code&gt; 来说更好用一些, 因此选择写 &lt;code&gt;ps1&lt;/code&gt; 格式的脚本.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Windows&#43;Komorebic&#43;Yasb</title>
-      <link>http://localhost:49801/posts/windows-komorebic-yasb/</link>
+      <link>http://localhost:1313/posts/windows-komorebic-yasb/</link>
       <pubDate>Mon, 29 Jul 2024 21:49:54 +0800</pubDate>
-      <guid>http://localhost:49801/posts/windows-komorebic-yasb/</guid>
+      <guid>http://localhost:1313/posts/windows-komorebic-yasb/</guid>
       <description>&lt;p&gt;使用 &lt;code&gt;Komorebic+Yasb&lt;/code&gt; 在 &lt;code&gt;Windows&lt;/code&gt; 中也获得类似 &lt;code&gt;dwm&lt;/code&gt; 的平铺式窗口的能力&lt;/p&gt;</description>
     </item>
     <item>
       <title>SSH配置管理</title>
-      <link>http://localhost:49801/posts/ssh-configmanager/</link>
+      <link>http://localhost:1313/posts/ssh-configmanager/</link>
       <pubDate>Sat, 01 Jun 2024 00:37:38 +0000</pubDate>
-      <guid>http://localhost:49801/posts/ssh-configmanager/</guid>
+      <guid>http://localhost:1313/posts/ssh-configmanager/</guid>
       <description>&lt;p&gt;SSH配置管理&lt;/p&gt;</description>
     </item>
   </channel>

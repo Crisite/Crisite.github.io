@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on crisite&#39;s blog</title>
+    <link>http://localhost:1313/categories/linux/</link>
+    <description>Recent content in Linux on crisite&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 06 Oct 2023 14:25:29 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ArchLinux&#43;dwm</title>
+      <link>http://localhost:1313/posts/archlinux-dwm/</link>
+      <pubDate>Fri, 06 Oct 2023 14:25:29 +0000</pubDate>
+      <guid>http://localhost:1313/posts/archlinux-dwm/</guid>
+      <description>&lt;p&gt;之前装arch和dwm的时候都没有记录，现在慢慢更新对dwm的定制优化吧&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

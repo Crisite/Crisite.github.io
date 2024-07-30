@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>设计模式 on crisite&#39;s blog</title>
+    <link>http://localhost:1313/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+    <description>Recent content in 设计模式 on crisite&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 08 Mar 2024 00:37:27 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>设计模式之门面模式</title>
+      <link>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Fri, 08 Mar 2024 00:37:27 +0000</pubDate>
+      <guid>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</guid>
+      <description>&lt;p&gt;门面（外观）模式旨在通过一个门面类（&lt;code&gt;Faceade.java&lt;/code&gt;）提供一个统一的接口，以隐藏系统的复杂性并提供更方便的访问方式。客户端只需要与门面类交互，而不需要直接与子系统中的个各类进行交互&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
