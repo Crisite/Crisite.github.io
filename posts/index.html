@@ -3,7 +3,7 @@
   x-data
   :class="$store.darkMode.class()"
   :data-theme="$store.darkMode.theme()">
-  <head>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archives | crisite&#39;s blog</title>
@@ -19,10 +19,10 @@
 " />
 
 
-<link rel="canonical" href="https://example.com/posts/" />
+<link rel="canonical" href="http://localhost:1313/posts/" />
 
 
-<meta property="og:url" content="https://example.com/posts/">
+<meta property="og:url" content="http://localhost:1313/posts/">
   <meta property="og:site_name" content="crisite&#39;s blog">
   <meta property="og:title" content="Archives">
   <meta property="og:description" content="Cut out summary from your post content here.">
@@ -84,7 +84,7 @@ html.dark #dream-global-bg {
       
       <div>
         
-        <a href="https://example.com/" class="text-lg font-semibold cursor-pointer">
+        <a href="http://localhost:1313/" class="text-lg font-semibold cursor-pointer">
           Hugo Theme Dream
         </a>
         
@@ -205,6 +205,26 @@ html.dark #dream-global-bg {
 
   <div class="max-w-[65ch] mx-auto mt-8 lg:mt-12">
     <ul class="timeline timeline-vertical">
+      
+      <li class="[--timeline-col-start:64px]">
+        <hr class="dark:bg-base-content" />
+        <div class="timeline-start !justify-self-start">
+          <div class="text-lg font-semibold">2024</div>
+        </div>
+        <div class="timeline-middle flex items-center mx-8 my-2">
+          <ion-icon name="time"></ion-icon>
+        </div>
+        <div class="timeline-end timeline-box dark:border-base-content/60 prose dark:prose-invert my-8">
+          <ul>
+            
+            <li>
+              <a href="/posts/windows-komorebic-yasb/">Windows&#43;Komorebic&#43;Yasb</a>
+            </li>
+            
+          </ul>
+        </div>
+        <hr class="dark:bg-base-content" />
+      </li>
       
       <li class="[--timeline-col-start:64px]">
         <hr class="dark:bg-base-content" />

@@ -2,17 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Archives on crisite&#39;s blog</title>
-    <link>https://example.com/posts/</link>
+    <link>http://localhost:1313/posts/</link>
     <description>Recent content in Archives on crisite&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 06 Oct 2023 14:25:29 +0000</lastBuildDate>
-    <atom:link href="https://example.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 29 Jul 2024 21:49:54 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Windows&#43;Komorebic&#43;Yasb</title>
+      <link>http://localhost:1313/posts/windows-komorebic-yasb/</link>
+      <pubDate>Mon, 29 Jul 2024 21:49:54 +0800</pubDate>
+      <guid>http://localhost:1313/posts/windows-komorebic-yasb/</guid>
+      <description>&lt;p&gt;使用 &lt;code&gt;Komorebic+Yasb&lt;/code&gt; 在 &lt;code&gt;Windows&lt;/code&gt; 中也获得类似 &lt;code&gt;dwm&lt;/code&gt; 的平铺式窗口的能力&lt;/p&gt;</description>
+    </item>
     <item>
       <title>ArchLinux&#43;dwm</title>
-      <link>https://example.com/posts/archlinux-dwm/</link>
+      <link>http://localhost:1313/posts/archlinux-dwm/</link>
       <pubDate>Fri, 06 Oct 2023 14:25:29 +0000</pubDate>
-      <guid>https://example.com/posts/archlinux-dwm/</guid>
+      <guid>http://localhost:1313/posts/archlinux-dwm/</guid>
       <description>&lt;p&gt;之前装arch和dwm的时候都没有记录，现在慢慢更新对dwm的定制优化吧&lt;/p&gt;</description>
     </item>
   </channel>
