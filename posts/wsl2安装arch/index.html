@@ -229,7 +229,7 @@ html.dark #dream-global-bg {
             
           
 
-          | <span>1 分钟阅读</span>
+          | <span>2 分钟阅读</span>
 
           
           | <span>更新于
@@ -282,7 +282,23 @@ html.dark #dream-global-bg {
 <p>在 <code>windows</code> 中执行</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># sudo命令需要下载 gsudo (choco install gsudo)</span>
 </span></span><span style="display:flex;"><span>sudo bcdedit /set hypervisorlaunchtype auto
-</span></span></code></pre></div><p>下载 <code>yuk7</code> 提供的 <code>ArchWsl</code> 包  <a href="https://github.com/yuk7/ArchWSL/releases">GitHub Releases</a></p>
+</span></span></code></pre></div><h2 id="更新-wsl">更新 wsl</h2>
+<p>需要先更新一下 <code>wsl</code> 不然可能会遇到各种奇奇怪怪的问题</p>
+<p>执行 <code>wsl --update</code> 然后需要在 <code>%USERPROFILE%\.wslconfig</code> 添加配置(没有就手动创建)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>experimental<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>autoMemoryReclaim<span style="color:#f92672">=</span>gradual  <span style="color:#75715e"># gradual  | dropcache | disabled</span>
+</span></span><span style="display:flex;"><span>networkingMode<span style="color:#f92672">=</span>mirrored
+</span></span><span style="display:flex;"><span>dnsTunneling<span style="color:#f92672">=</span>true
+</span></span><span style="display:flex;"><span>firewall<span style="color:#f92672">=</span>true
+</span></span><span style="display:flex;"><span>autoProxy<span style="color:#f92672">=</span>true
+</span></span></code></pre></div><p>然后执行 <code>wsl --shutdown</code> 关闭后重启 <code>wsl</code></p>
+<blockquote>
+<p>此处是因为更新wsl后启动镜像会出现报错:</p>
+<p>wsl: 检测到 localhost 代理配置，但未镜像到 WSL。NAT 模式下的 WSL 不支持 localhost 代理。</p>
+<p>参考链接 <a href="https://github.com/microsoft/WSL/issues/10753#issuecomment-1816379717">github issue</a></p>
+</blockquote>
+<h2 id="下载arch">下载Arch</h2>
+<p>下载 <code>yuk7</code> 提供的 <code>ArchWsl</code> 包  <a href="https://github.com/yuk7/ArchWSL/releases">GitHub Releases</a></p>
 <p>选择下载 <code>Arch.zip</code> 包(可以自己指定安装路径, 避免过多的占用C盘)</p>
 <p>选择合适的路径解压 <code>Arch.zip</code> 并且执行 <code>Arch.exe</code> 后, 就可以配置 <code>Arch</code> 了</p>
 <h2 id="配置arch">配置Arch</h2>
@@ -292,14 +308,63 @@ html.dark #dream-global-bg {
 </span></span><span style="display:flex;"><span>useradd -m -G wheel -s /bin/bash <span style="color:#f92672">{</span>username<span style="color:#f92672">}</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置密码</span>
 </span></span><span style="display:flex;"><span>passwd <span style="color:#f92672">{</span>username<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 给root用户也设置一个密码</span>
+</span></span><span style="display:flex;"><span>passwd root
 </span></span></code></pre></div><p>然后退出 <code>Arch</code> 在 <code>Windows</code> 中执行</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Arch.exe config --default-user <span style="color:#f92672">{</span>username<span style="color:#f92672">}</span>
-</span></span></code></pre></div><blockquote>
+</span></span></code></pre></div><p>然后就可以重新进入 <code>Arch</code> 并且执行 <code>sudo</code> 测试是否生效</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 参考 https://mirrors.ustc.edu.cn/help/archlinux.html</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 添加软件源</span>
+</span></span><span style="display:flex;"><span>cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+</span></span><span style="display:flex;"><span>rm -rf /etc/pacman.d/mirrorlist
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Server = https://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch&#34;</span> &gt;&gt; /etc/pacman.d/mirrorlist
+</span></span><span style="display:flex;"><span>cat /etc/pacman.d/mirrorlist.backup &gt;&gt; /etc/pacman.d/mirrorlist
+</span></span><span style="display:flex;"><span>rm -rf /etc/pacman.d/mirrorlist.backup
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用国内镜像</span>
+</span></span><span style="display:flex;"><span>su
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;[archlinuxcn]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Server = https://mirrors.ustc.edu.cn/archlinuxcn/</span>$arch<span style="color:#e6db74">&#34;</span> &gt;&gt; /etc/pacman.conf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 初始化密钥环 (Keyring)</span>
+</span></span><span style="display:flex;"><span>sudo pacman-key --init
+</span></span><span style="display:flex;"><span>sudo pacman-key --populate
+</span></span><span style="display:flex;"><span>sudo pacman -Syy archlinux-keyring
+</span></span><span style="display:flex;"><span>sudo pacman -Su
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 通常情况下，需要先安装 archlinux-keyring，因为 archlinuxcn-keyring 可能依赖于它</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S --noconfirm archlinuxcn-keyring
+</span></span><span style="display:flex;"><span>sudo pacman -Syyu
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装 yay</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S yay
+</span></span></code></pre></div><p>调整 <code>yay</code> 默认设定</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>yay -G --save --answerclean All --answerdiff None
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 是否在干净环境构建：总是</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 是否显示 Diff：总不</span>
+</span></span></code></pre></div><h2 id="安装图形化界面-x-server">安装图形化界面 X Server</h2>
+<ol>
+<li>
+<p>下载 <a href="https://sourceforge.net/projects/vcxsrv/">VcXsrv</a></p>
+<p>指定好安装路径后, 对安装后获得的两个可执行文件 <code>vcxsrv.exe</code> 和 <code>xlaunch.exe</code> 进行操作: <strong>右击-&gt;属性-&gt;兼容性-&gt;更改高 DPI 设置-&gt;勾选替代高 DPI 缩放行为</strong>
+如此, 可以使得 <code>vcxsrc</code>在高分辨率的显示屏上有更清晰的效果</p>
+</li>
+<li>
+<p>更新驱动</p>
+<p><a href="https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps#install-support-for-linux-gui-apps">更新驱动地址</a></p>
+</li>
+<li></li>
+</ol>
+<blockquote>
+<p>Unable to accessing Windows applications from WSL</p>
+<p><a href="https://github.com/microsoft/WSL/issues/4793#issuecomment-588321333">github issue</a></p>
+</blockquote>
+<blockquote>
 <p>参考资料:</p>
 <p><a href="https://zhuanlan.zhihu.com/p/475462241">Windows 11 安装 WSL2</a></p>
 <p><a href="https://moe23333.vercel.app/posts/install-arch-wsl2">在 WSL 2 中安装 Arch Linux</a></p>
 <p><a href="https://juejin.cn/post/6912823684688248840">terminal+wsl2+arch</a></p>
 <p><a href="https://github.com/yuk7/ArchWSL">ArchWsl</a></p>
+<p><a href="https://mirrors.ustc.edu.cn/help/archlinux.html">Arch Linux - USTC Mirror Help</a></p>
 </blockquote>
 
       

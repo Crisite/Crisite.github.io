@@ -6,8 +6,15 @@
     <description>Recent content in Linux on crisite&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 06 Oct 2023 14:25:29 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 01 Aug 2024 21:52:21 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Wsl2安装Arch</title>
+      <link>http://localhost:1313/posts/wsl2%E5%AE%89%E8%A3%85arch/</link>
+      <pubDate>Thu, 01 Aug 2024 21:52:21 +0800</pubDate>
+      <guid>http://localhost:1313/posts/wsl2%E5%AE%89%E8%A3%85arch/</guid>
+      <description>&lt;p&gt;因为在一台设备上维护多个环境还是比较麻烦, 因此选择使用 &lt;code&gt;Wsl&lt;/code&gt; 来创建一个 &lt;code&gt;Linux&lt;/code&gt; 子系统&lt;/p&gt;&#xA;&lt;p&gt;比较习惯使用 &lt;code&gt;Arch&lt;/code&gt; 就选择装 &lt;code&gt;Arch&lt;/code&gt;了(虽然麻烦好多&amp;hellip;)&lt;/p&gt;</description>
+    </item>
     <item>
       <title>ArchLinux&#43;dwm</title>
       <link>http://localhost:1313/posts/archlinux-dwm/</link>
