@@ -337,7 +337,11 @@ html.dark #dream-global-bg {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装 yay</span>
 </span></span><span style="display:flex;"><span>sudo pacman -S yay
-</span></span></code></pre></div><p>调整 <code>yay</code> 默认设定</p>
+</span></span></code></pre></div><h2 id="换源">换源</h2>
+<p>上面的是添加 <code>archlinux</code> 的软件源, 更新系统该慢还是慢, 需要换源
+一开始不知道从哪个博客看的换源方法, 结果没生效</p>
+<p>于是手动去 <code>/etc/pacman.d/mirrorlist</code> 里取消掉几个镜像的注释符号(搜<code>China</code>或者<code>Hong Kong</code>)</p>
+<p>调整 <code>yay</code> 默认设定</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>yay -G --save --answerclean All --answerdiff None
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 是否在干净环境构建：总是</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 是否显示 Diff：总不</span>
