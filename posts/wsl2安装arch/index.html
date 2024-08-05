@@ -229,7 +229,7 @@ html.dark #dream-global-bg {
             
           
 
-          | <span>2 分钟阅读</span>
+          | <span>3 分钟阅读</span>
 
           
           | <span>更新于
@@ -409,6 +409,22 @@ html.dark #dream-global-bg {
 </blockquote>
 </li>
 </ol>
+<hr>
+<h2 id="软件下载">软件下载</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>yay -S intellij-idea-ultimate-edition
+</span></span></code></pre></div><hr>
+<h2 id="下载idea报错">下载idea报错</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>libfakeroot: connect: Cannot assign requested address
+</span></span><span style="display:flex;"><span> -&gt; error making: intellij-idea-ultimate-edition-exit status <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span> -&gt; Failed to install the following packages. Manual intervention is required:
+</span></span><span style="display:flex;"><span>intellij-idea-ultimate-edition - exit status <span style="color:#ae81ff">5</span>
+</span></span></code></pre></div><p>解决方法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo pacman -S fakeroot
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 选择 Y, Y</span>
+</span></span></code></pre></div><p>看起来似乎是 <code>yay</code> 使用了比较旧的版本的 <code>fakeroot</code></p>
+<blockquote>
+<p><a href="https://github.com/yuk7/ArchWSL/issues/63">github issue</a></p>
+</blockquote>
 <hr>
 <blockquote>
 <p>参考资料:</p>

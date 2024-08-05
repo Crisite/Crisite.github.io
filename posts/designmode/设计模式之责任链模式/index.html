@@ -277,6 +277,12 @@ html.dark #dream-global-bg {
 <li>一个Handler接口，多个Handler实现类（一种处理方式对应一个Handler）</li>
 <li>将多个Handler添加到 chain（多加了一层）中，系统通过调用chain的方法来执行chain中的所有Handler</li>
 </ul>
+<p>以 <code>spring-security</code> 为例</p>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/image-20240121100535369.png" alt="image-20240121100535369"></p>
+<p>在责任链模式中, 定义了有多个执行器(<code>Filter</code>), 将执行器统一交给 <code>chainProxy</code> 进行管理. 发送者发送请求时, 只需要把请求交给客户端,
+无须关心请求的处理细节和请求的传递过程, 请求在链上会自动传递, 直到找到请求拦截条件的拦截器为止.</p>
+<h2 id="过滤器模式的优点">过滤器模式的优点</h2>
+<h2 id="示例">示例</h2>
 
       
     </article>
