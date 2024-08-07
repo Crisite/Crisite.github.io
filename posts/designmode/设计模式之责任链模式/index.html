@@ -282,7 +282,47 @@ html.dark #dream-global-bg {
 <p>在责任链模式中, 定义了有多个执行器(<code>Filter</code>), 将执行器统一交给 <code>chainProxy</code> 进行管理. 发送者发送请求时, 只需要把请求交给客户端,
 无须关心请求的处理细节和请求的传递过程, 请求在链上会自动传递, 直到找到请求拦截条件的拦截器为止.</p>
 <h2 id="过滤器模式的优点">过滤器模式的优点</h2>
+<p><strong>请求与处理解耦</strong>, 请求者无需关心链路结构.</p>
+<p>责任链可以<strong>动态组合</strong>, 可以灵活地修改链路结构, 新增或删除处理器</p>
 <h2 id="示例">示例</h2>
+<p>以 <code>SpringSecurity</code> 中的责任链模式为例</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/** 定义一个责任链 */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">SecurityFilterChain</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">matches</span>(HttpServletRequest request);
+</span></span><span style="display:flex;"><span>    List<span style="color:#f92672">&lt;</span>Filter<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">getFilters</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/** 初始化时将过滤器添加到过滤器链里面 */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> HttpSecurity <span style="color:#a6e22e">addFilter</span>(Filter filter) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* ..... */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">filters</span>.<span style="color:#a6e22e">add</span>(<span style="color:#66d9ef">new</span> OrderedFilter(filter, order));
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/** 循环调用链中的拦截器的 doFilter方法 */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">doFilterInternal</span>(ServletRequest request, ServletResponse response, FilterChain chain)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">throws</span> IOException, ServletException {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* ..... */</span>
+</span></span><span style="display:flex;"><span>    List<span style="color:#f92672">&lt;</span>Filter<span style="color:#f92672">&gt;</span> filters <span style="color:#f92672">=</span> getFilters(firewallRequest);
+</span></span><span style="display:flex;"><span>    FilterChain reset <span style="color:#f92672">=</span> (req, res) <span style="color:#f92672">-&gt;</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Deactivate path stripping as we exit the security filter chain</span>
+</span></span><span style="display:flex;"><span>        firewallRequest.<span style="color:#a6e22e">reset</span>();
+</span></span><span style="display:flex;"><span>        chain.<span style="color:#a6e22e">doFilter</span>(req, res);
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">filterChainDecorator</span>.<span style="color:#a6e22e">decorate</span>(reset, filters).<span style="color:#a6e22e">doFilter</span>(firewallRequest, firewallResponse);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/** 遍历 chain 中的拦截器 */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">doFilter</span>(ServletRequest request, ServletResponse response) <span style="color:#66d9ef">throws</span> IOException, ServletException {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentPosition</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">size</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">originalChain</span>.<span style="color:#a6e22e">doFilter</span>(request, response);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentPosition</span><span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>    ObservationFilter nextFilter <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">additionalFilters</span>.<span style="color:#a6e22e">get</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">currentPosition</span> <span style="color:#f92672">-</span> 1);
+</span></span><span style="display:flex;"><span>    nextFilter.<span style="color:#a6e22e">doFilter</span>(request, response, <span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
 
       
     </article>
