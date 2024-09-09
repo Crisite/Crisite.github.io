@@ -2,87 +2,94 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>crisite&#39;s blog</title>
-    <link>http://localhost:1313/</link>
+    <link>http://localhost:56749/</link>
     <description>Recent content on crisite&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 01 Aug 2024 21:52:21 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 09 Sep 2024 19:19:45 +0800</lastBuildDate>
+    <atom:link href="http://localhost:56749/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>建造者模式</title>
+      <link>http://localhost:56749/posts/designmode/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Mon, 09 Sep 2024 19:19:45 +0800</pubDate>
+      <guid>http://localhost:56749/posts/designmode/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid>
+      <description>&lt;p&gt;建造者模式主要是用于对单一复杂类的创建管理.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Wsl2安装Arch</title>
-      <link>http://localhost:1313/posts/wsl2%E5%AE%89%E8%A3%85arch/</link>
+      <link>http://localhost:56749/posts/wsl2%E5%AE%89%E8%A3%85arch/</link>
       <pubDate>Thu, 01 Aug 2024 21:52:21 +0800</pubDate>
-      <guid>http://localhost:1313/posts/wsl2%E5%AE%89%E8%A3%85arch/</guid>
+      <guid>http://localhost:56749/posts/wsl2%E5%AE%89%E8%A3%85arch/</guid>
       <description>&lt;p&gt;因为在一台设备上维护多个环境还是比较麻烦, 因此选择使用 &lt;code&gt;Wsl&lt;/code&gt; 来创建一个 &lt;code&gt;Linux&lt;/code&gt; 子系统&lt;/p&gt;&#xA;&lt;p&gt;比较习惯使用 &lt;code&gt;Arch&lt;/code&gt; 就选择装 &lt;code&gt;Arch&lt;/code&gt;了(虽然麻烦好多&amp;hellip;)&lt;/p&gt;</description>
     </item>
     <item>
       <title>ps1脚本签名</title>
-      <link>http://localhost:1313/posts/ps1-script-signature/</link>
+      <link>http://localhost:56749/posts/ps1-script-signature/</link>
       <pubDate>Tue, 30 Jul 2024 15:01:14 +0800</pubDate>
-      <guid>http://localhost:1313/posts/ps1-script-signature/</guid>
+      <guid>http://localhost:56749/posts/ps1-script-signature/</guid>
       <description>&lt;p&gt;因为 &lt;code&gt;Win11&lt;/code&gt; 下的 &lt;code&gt;PowerShell&lt;/code&gt; 相对 &lt;code&gt;cmd&lt;/code&gt; 来说更好用一些, 因此选择写 &lt;code&gt;ps1&lt;/code&gt; 格式的脚本.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Windows&#43;Komorebic&#43;Yasb</title>
-      <link>http://localhost:1313/posts/windows-komorebic-yasb/</link>
+      <link>http://localhost:56749/posts/windows-komorebic-yasb/</link>
       <pubDate>Mon, 29 Jul 2024 21:49:54 +0800</pubDate>
-      <guid>http://localhost:1313/posts/windows-komorebic-yasb/</guid>
+      <guid>http://localhost:56749/posts/windows-komorebic-yasb/</guid>
       <description>&lt;p&gt;使用 &lt;code&gt;Komorebic+Yasb&lt;/code&gt; 在 &lt;code&gt;Windows&lt;/code&gt; 中也获得类似 &lt;code&gt;dwm&lt;/code&gt; 的平铺式窗口的能力&lt;/p&gt;</description>
     </item>
     <item>
       <title>SSH配置管理</title>
-      <link>http://localhost:1313/posts/ssh-configmanager/</link>
+      <link>http://localhost:56749/posts/ssh-configmanager/</link>
       <pubDate>Sat, 01 Jun 2024 00:37:38 +0000</pubDate>
-      <guid>http://localhost:1313/posts/ssh-configmanager/</guid>
+      <guid>http://localhost:56749/posts/ssh-configmanager/</guid>
       <description>&lt;p&gt;SSH配置管理&lt;/p&gt;</description>
     </item>
     <item>
-      <title>设计模式之模版方法模式</title>
-      <link>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</link>
+      <title>模版方法模式</title>
+      <link>http://localhost:56749/posts/designmode/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Mon, 18 Mar 2024 22:37:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:56749/posts/designmode/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;目前的观点就是 模版方法就是发生在抽象类和其子类之间。&lt;/p&gt;&#xA;&lt;p&gt;抽象类定义算法骨架，将一些待定的操作延迟到子类中，使得子类可以在不改变算法结构的前提下重写算法的某些步骤&lt;/p&gt;</description>
     </item>
     <item>
-      <title>设计模式之单例模式</title>
-      <link>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</link>
+      <title>单例模式</title>
+      <link>http://localhost:56749/posts/designmode/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Fri, 08 Mar 2024 00:38:24 +0000</pubDate>
-      <guid>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:56749/posts/designmode/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;几种单例模式的实现：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;饿汉式&lt;/li&gt;&#xA;&lt;li&gt;懒汉式&lt;/li&gt;&#xA;&lt;li&gt;双重锁检测&lt;/li&gt;&#xA;&lt;li&gt;枚举类&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
     </item>
     <item>
-      <title>设计模式之注册器模式</title>
-      <link>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%B3%A8%E5%86%8C%E5%99%A8%E6%A8%A1%E5%BC%8F/</link>
+      <title>注册器模式</title>
+      <link>http://localhost:56749/posts/designmode/%E6%B3%A8%E5%86%8C%E5%99%A8%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Fri, 08 Mar 2024 00:38:07 +0000</pubDate>
-      <guid>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%B3%A8%E5%86%8C%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:56749/posts/designmode/%E6%B3%A8%E5%86%8C%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;注册器模式不属于 23 种设计模式之一, 注册器模式的思想类似于工厂模式&lt;/p&gt;&#xA;&lt;p&gt;注册器模式 -&amp;gt; 由一个注册器来统一的管理所有的实例,根据用户需要返回不同的实例&lt;/p&gt;</description>
     </item>
     <item>
-      <title>设计模式之适配器模式</title>
-      <link>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</link>
+      <title>适配器模式</title>
+      <link>http://localhost:56749/posts/designmode/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Fri, 08 Mar 2024 00:37:38 +0000</pubDate>
-      <guid>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:56749/posts/designmode/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;适配器模式用于将一个类的接口转换为客户端所期待的另一个接口，从而使原本不兼容的接口能够一起工作。&lt;/p&gt;</description>
     </item>
     <item>
-      <title>设计模式之门面模式</title>
-      <link>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</link>
+      <title>门面模式</title>
+      <link>http://localhost:56749/posts/designmode/%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Fri, 08 Mar 2024 00:37:27 +0000</pubDate>
-      <guid>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:56749/posts/designmode/%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;门面（外观）模式旨在通过一个门面类（&lt;code&gt;Faceade.java&lt;/code&gt;）提供一个统一的接口，以隐藏系统的复杂性并提供更方便的访问方式。客户端只需要与门面类交互，而不需要直接与子系统中的个各类进行交互&lt;/p&gt;</description>
     </item>
     <item>
-      <title>设计模式之责任链模式</title>
-      <link>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/</link>
+      <title>责任链模式</title>
+      <link>http://localhost:56749/posts/designmode/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Fri, 08 Mar 2024 00:37:14 +0000</pubDate>
-      <guid>http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:56749/posts/designmode/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;系统需要处理多变的需求，考虑责任链模式&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;一个Handler接口，多个Handler实现类（一种处理方式对应一个Handler）&lt;/li&gt;&#xA;&lt;li&gt;将多个Handler添加到 chain（多加了一层）中，系统通过调用chain的方法来执行chain中的所有Handler&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
     </item>
     <item>
       <title>ArchLinux&#43;dwm</title>
-      <link>http://localhost:1313/posts/archlinux-dwm/</link>
+      <link>http://localhost:56749/posts/archlinux-dwm/</link>
       <pubDate>Fri, 06 Oct 2023 14:25:29 +0000</pubDate>
-      <guid>http://localhost:1313/posts/archlinux-dwm/</guid>
+      <guid>http://localhost:56749/posts/archlinux-dwm/</guid>
       <description>&lt;p&gt;之前装arch和dwm的时候都没有记录，现在慢慢更新对dwm的定制优化吧&lt;/p&gt;</description>
     </item>
   </channel>

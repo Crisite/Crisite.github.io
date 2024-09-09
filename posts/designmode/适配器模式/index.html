@@ -3,10 +3,10 @@
   x-data
   :class="$store.darkMode.class()"
   :data-theme="$store.darkMode.theme()">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=56749&amp;path=livereload" data-no-instant defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>设计模式之注册器模式 | crisite&#39;s blog</title>
+    <title>适配器模式 | crisite&#39;s blog</title>
 
     
 <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
@@ -15,35 +15,32 @@
 
 
 <meta name="author" content="泡芙" />
-<meta name="description" content="注册器模式不属于 23 种设计模式之一, 注册器模式的思想类似于工厂模式
-注册器模式 -&amp;gt; 由一个注册器来统一的管理所有的实例,根据用户需要返回不同的实例
+<meta name="description" content="适配器模式用于将一个类的接口转换为客户端所期待的另一个接口，从而使原本不兼容的接口能够一起工作。
 " />
 
 
-<link rel="canonical" href="http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%B3%A8%E5%86%8C%E5%99%A8%E6%A8%A1%E5%BC%8F/" />
+<link rel="canonical" href="http://localhost:56749/posts/designmode/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/" />
 
 
-<meta property="og:url" content="http://localhost:1313/posts/designmode/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%B3%A8%E5%86%8C%E5%99%A8%E6%A8%A1%E5%BC%8F/">
+<meta property="og:url" content="http://localhost:56749/posts/designmode/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/">
   <meta property="og:site_name" content="crisite&#39;s blog">
-  <meta property="og:title" content="设计模式之注册器模式">
-  <meta property="og:description" content="注册器模式不属于 23 种设计模式之一, 注册器模式的思想类似于工厂模式
-注册器模式 -&gt; 由一个注册器来统一的管理所有的实例,根据用户需要返回不同的实例">
+  <meta property="og:title" content="适配器模式">
+  <meta property="og:description" content="适配器模式用于将一个类的接口转换为客户端所期待的另一个接口，从而使原本不兼容的接口能够一起工作。">
   <meta property="og:locale" content="en">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2024-03-08T00:38:07+00:00">
-    <meta property="article:modified_time" content="2024-03-08T00:38:07+00:00">
+    <meta property="article:published_time" content="2024-03-08T00:37:38+00:00">
+    <meta property="article:modified_time" content="2024-03-08T00:37:38+00:00">
     <meta property="article:tag" content="设计模式">
-    <meta property="og:image" content="http://localhost:1313/img/designMode/decover3.png">
+    <meta property="og:image" content="http://localhost:56749/img/designMode/decover5.png">
 
 
 
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="http://localhost:1313/img/designMode/decover3.png">
-  <meta name="twitter:title" content="设计模式之注册器模式">
-  <meta name="twitter:description" content="注册器模式不属于 23 种设计模式之一, 注册器模式的思想类似于工厂模式
-注册器模式 -&gt; 由一个注册器来统一的管理所有的实例,根据用户需要返回不同的实例">
+  <meta name="twitter:image" content="http://localhost:56749/img/designMode/decover5.png">
+  <meta name="twitter:title" content="适配器模式">
+  <meta name="twitter:description" content="适配器模式用于将一个类的接口转换为客户端所期待的另一个接口，从而使原本不兼容的接口能够一起工作。">
 
 
 
@@ -106,7 +103,7 @@ html.dark #dream-global-bg {
       
       <div>
         
-        <a href="http://localhost:1313/" class="text-lg font-semibold cursor-pointer">
+        <a href="http://localhost:56749/" class="text-lg font-semibold cursor-pointer">
           Hugo Theme Dream
         </a>
         
@@ -220,7 +217,7 @@ html.dark #dream-global-bg {
     
     <article class="mx-auto prose dark:prose-invert" id="dream-single-post-main">
       <header>
-        <h1>设计模式之注册器模式</h1>
+        <h1>适配器模式</h1>
         <p class="text-sm">
           
             
@@ -260,10 +257,10 @@ html.dark #dream-global-bg {
 
 
           <span class="flex items-center gap-2">
-  <a class="group inline-flex items-center p-2 text-sm rounded-full cursor-pointer hover:bg-primary" href="https://twitter.com/intent/tweet?text=%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f%e4%b9%8b%e6%b3%a8%e5%86%8c%e5%99%a8%e6%a8%a1%e5%bc%8f&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fdesignmode%2f%25E8%25AE%25BE%25E8%25AE%25A1%25E6%25A8%25A1%25E5%25BC%258F%25E4%25B9%258B%25E6%25B3%25A8%25E5%2586%258C%25E5%2599%25A8%25E6%25A8%25A1%25E5%25BC%258F%2f" title="Share on X">
+  <a class="group inline-flex items-center p-2 text-sm rounded-full cursor-pointer hover:bg-primary" href="https://twitter.com/intent/tweet?text=%e9%80%82%e9%85%8d%e5%99%a8%e6%a8%a1%e5%bc%8f&url=http%3a%2f%2flocalhost%3a56749%2fposts%2fdesignmode%2f%25E9%2580%2582%25E9%2585%258D%25E5%2599%25A8%25E6%25A8%25A1%25E5%25BC%258F%2f" title="Share on X">
     <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
   </a>
-  <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fposts%2fdesignmode%2f%25E8%25AE%25BE%25E8%25AE%25A1%25E6%25A8%25A1%25E5%25BC%258F%25E4%25B9%258B%25E6%25B3%25A8%25E5%2586%258C%25E5%2599%25A8%25E6%25A8%25A1%25E5%25BC%258F%2f" title="Share on Facebook">
+  <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a56749%2fposts%2fdesignmode%2f%25E9%2580%2582%25E9%2585%258D%25E5%2599%25A8%25E6%25A8%25A1%25E5%25BC%258F%2f" title="Share on Facebook">
     <ion-icon class="group-hover:text-primary-content" name="logo-facebook"></ion-icon>
   </a>
 </span>
@@ -273,37 +270,13 @@ html.dark #dream-global-bg {
 
       
 
-      <p>注册器模式不属于 23 种设计模式之一, 注册器模式的思想类似于工厂模式</p>
-<p>注册器模式 -&gt; 由一个注册器来统一的管理所有的实例,根据用户需要返回不同的实例</p>
-<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/2024-07-31-img.png" alt="注册器模式"></p>
-<p>注册器模式的思想实际上就是: 将对象的创建和使用分离开来, 由一个统一的注册中心来管理对象实例的创建和访问</p>
-<blockquote>
-<p>注册器模式的作用：</p>
-<ol>
-<li>解耦：通过注册器模式，对象的创建和使用被解耦，使得对象的创建可以更加灵活，同时也使得对象的使用者不必关心对象的创建过程。</li>
-<li>集中管理：注册器模式允许对应用程序中的对象实例进行集中管理，便于对象的查找、替换和维护。</li>
-<li>单例管理：注册器模式常用于实现单例模式，确保应用程序中某个类只有一个实例，并且可以通过注册器全局访问。</li>
-<li>依赖注入：注册器模式可以用来实现依赖注入，通过注册器提供的服务实例，可以很方便地将依赖注入到其他需要这些服务的类中。</li>
-<li>命名服务：注册器模式允许使用字符串键来标识服务，这样可以通过名字来访问服务，而不是直接依赖具体的类名或实例。</li>
-<li>动态扩展：注册器模式支持运行时动态地添加和删除服务实例，从而提供了很好的扩展性。</li>
-</ol>
-</blockquote>
-<h3 id="注册器模式和枚举类或映射的区别">注册器模式和枚举类或映射的区别:</h3>
-<p>注册器模式</p>
+      <p>适配器模式用于将一个类的接口转换为客户端所期待的另一个接口，从而使原本不兼容的接口能够一起工作。</p>
+<p>适配器模式三个角色：</p>
 <ul>
-<li>它提供了一个中心化的注册和管理机制, 用于存储和管理实例</li>
-<li>通常它会涉及到实例的动态注册、检索、销毁 (参考 <code>nacos</code> 的服务管理)</li>
-<li>它强调的是对象实例的生命周期管理和访问控制</li>
+<li>目标接口（<code>Target</code>）：客户端所需要的接口</li>
+<li>源接口（<code>Adaptee</code>）：需要被适配的接口</li>
+<li>适配器（<code>Adapter</code>）：实现目标接口</li>
 </ul>
-<p>枚举或映射(Map&hellip;)</p>
-<ul>
-<li>通常用于存储预定义的常量值, 通常负责值的定义和访问, 而非对象实例的管理</li>
-<li>类似枚举类存放的对象通常是静态的, 不涉及动态变化</li>
-</ul>
-<blockquote>
-<p>策略模式中用枚举类存放一系列预定义的策略, 但是策略实例的创建通常是静态的，不涉及运行时的动态注册</p>
-<p>策略模式关注的是算法的封装和切换，而不是对象实例的动态管理</p>
-</blockquote>
 
       
     </article>
