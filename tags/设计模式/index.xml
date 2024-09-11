@@ -2,59 +2,66 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>设计模式 on crisite&#39;s blog</title>
-    <link>http://localhost:56749/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+    <link>http://localhost:1313/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
     <description>Recent content in 设计模式 on crisite&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 09 Sep 2024 19:19:45 +0800</lastBuildDate>
-    <atom:link href="http://localhost:56749/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 Sep 2024 11:02:18 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>原型模式</title>
+      <link>http://localhost:1313/posts/designmode/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Tue, 10 Sep 2024 11:02:18 +0800</pubDate>
+      <guid>http://localhost:1313/posts/designmode/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/</guid>
+      <description>&lt;p&gt;原型接口其实很简单, 就是克隆对象, 但是需要考虑业务场景.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>建造者模式</title>
-      <link>http://localhost:56749/posts/designmode/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</link>
+      <link>http://localhost:1313/posts/designmode/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Mon, 09 Sep 2024 19:19:45 +0800</pubDate>
-      <guid>http://localhost:56749/posts/designmode/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:1313/posts/designmode/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;建造者模式主要是用于对单一复杂类的创建管理.&lt;/p&gt;</description>
     </item>
     <item>
       <title>模版方法模式</title>
-      <link>http://localhost:56749/posts/designmode/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</link>
+      <link>http://localhost:1313/posts/designmode/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Mon, 18 Mar 2024 22:37:00 +0000</pubDate>
-      <guid>http://localhost:56749/posts/designmode/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:1313/posts/designmode/%E6%A8%A1%E7%89%88%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;目前的观点就是 模版方法就是发生在抽象类和其子类之间。&lt;/p&gt;&#xA;&lt;p&gt;抽象类定义算法骨架，将一些待定的操作延迟到子类中，使得子类可以在不改变算法结构的前提下重写算法的某些步骤&lt;/p&gt;</description>
     </item>
     <item>
       <title>单例模式</title>
-      <link>http://localhost:56749/posts/designmode/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</link>
+      <link>http://localhost:1313/posts/designmode/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Fri, 08 Mar 2024 00:38:24 +0000</pubDate>
-      <guid>http://localhost:56749/posts/designmode/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:1313/posts/designmode/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;几种单例模式的实现：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;饿汉式&lt;/li&gt;&#xA;&lt;li&gt;懒汉式&lt;/li&gt;&#xA;&lt;li&gt;双重锁检测&lt;/li&gt;&#xA;&lt;li&gt;枚举类&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
     </item>
     <item>
       <title>注册器模式</title>
-      <link>http://localhost:56749/posts/designmode/%E6%B3%A8%E5%86%8C%E5%99%A8%E6%A8%A1%E5%BC%8F/</link>
+      <link>http://localhost:1313/posts/designmode/%E6%B3%A8%E5%86%8C%E5%99%A8%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Fri, 08 Mar 2024 00:38:07 +0000</pubDate>
-      <guid>http://localhost:56749/posts/designmode/%E6%B3%A8%E5%86%8C%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:1313/posts/designmode/%E6%B3%A8%E5%86%8C%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;注册器模式不属于 23 种设计模式之一, 注册器模式的思想类似于工厂模式&lt;/p&gt;&#xA;&lt;p&gt;注册器模式 -&amp;gt; 由一个注册器来统一的管理所有的实例,根据用户需要返回不同的实例&lt;/p&gt;</description>
     </item>
     <item>
       <title>适配器模式</title>
-      <link>http://localhost:56749/posts/designmode/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</link>
+      <link>http://localhost:1313/posts/designmode/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Fri, 08 Mar 2024 00:37:38 +0000</pubDate>
-      <guid>http://localhost:56749/posts/designmode/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:1313/posts/designmode/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;适配器模式用于将一个类的接口转换为客户端所期待的另一个接口，从而使原本不兼容的接口能够一起工作。&lt;/p&gt;</description>
     </item>
     <item>
       <title>门面模式</title>
-      <link>http://localhost:56749/posts/designmode/%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</link>
+      <link>http://localhost:1313/posts/designmode/%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Fri, 08 Mar 2024 00:37:27 +0000</pubDate>
-      <guid>http://localhost:56749/posts/designmode/%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:1313/posts/designmode/%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;门面（外观）模式旨在通过一个门面类（&lt;code&gt;Faceade.java&lt;/code&gt;）提供一个统一的接口，以隐藏系统的复杂性并提供更方便的访问方式。客户端只需要与门面类交互，而不需要直接与子系统中的个各类进行交互&lt;/p&gt;</description>
     </item>
     <item>
       <title>责任链模式</title>
-      <link>http://localhost:56749/posts/designmode/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/</link>
+      <link>http://localhost:1313/posts/designmode/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Fri, 08 Mar 2024 00:37:14 +0000</pubDate>
-      <guid>http://localhost:56749/posts/designmode/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>http://localhost:1313/posts/designmode/%E8%B4%A3%E4%BB%BB%E9%93%BE%E6%A8%A1%E5%BC%8F/</guid>
       <description>&lt;p&gt;系统需要处理多变的需求，考虑责任链模式&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;一个Handler接口，多个Handler实现类（一种处理方式对应一个Handler）&lt;/li&gt;&#xA;&lt;li&gt;将多个Handler添加到 chain（多加了一层）中，系统通过调用chain的方法来执行chain中的所有Handler&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
     </item>
   </channel>
