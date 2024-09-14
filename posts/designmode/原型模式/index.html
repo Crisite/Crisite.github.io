@@ -275,8 +275,8 @@ html.dark #dream-global-bg {
 <p>主要就是需要实现一个包含 克隆自身方法的接口, 克隆自身又分为深拷贝和浅拷贝.</p>
 <blockquote>
 <p>原型模式其实就是一种克隆对象的方法，在我们的编码时候是很常见的，比如我们常用的的BeanUtils.copyProperties就是一种对象的浅copy，其实现在我们实例化对象操作并不是特别耗费性能，所以在针对一些特殊场景我们还是需要克隆那些已经实例化的对象的：</p>
-<p>依赖外部资源或硬件密集型操作，比如数据库查询，或者一些存在IO操作的场景
-获取相同对象在相同状态的拷贝从而不需要重复创建获取状态的操作的情况</p>
+<p>依赖外部资源或硬件密集型操作，比如数据库查询，或者一些存在IO操作的场景</p>
+<p>获取相同对象在相同状态的拷贝从而不需要重复创建获取状态的操作的情况</p>
 </blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DeepCopy</span> <span style="color:#66d9ef">implements</span> Cloneable {

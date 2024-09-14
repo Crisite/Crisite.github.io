@@ -271,12 +271,80 @@ html.dark #dream-global-bg {
       
 
       <p>适配器模式用于将一个类的接口转换为客户端所期待的另一个接口，从而使原本不兼容的接口能够一起工作。</p>
-<p>适配器模式三个角色：</p>
-<ul>
-<li>目标接口（<code>Target</code>）：客户端所需要的接口</li>
-<li>源接口（<code>Adaptee</code>）：需要被适配的接口</li>
-<li>适配器（<code>Adapter</code>）：实现目标接口</li>
-</ul>
+<p>使用过的适配器模式实现方式:</p>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/2024-09-14-M0zWdZ.png" alt=""></p>
+<p>这种实现方式实际上是省略了适配器类? 看起来并不符合开闭原则, 因为在接入系统的时候需要修改原有代码</p>
+<h2 id="类适配器-使用继承">类适配器 (使用继承)</h2>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/2024-09-14-1dRdhC.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Target</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">method</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Adaptee</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">serviceMethod</span>() {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Adapter</span> <span style="color:#66d9ef">extends</span> Adaptee <span style="color:#66d9ef">implements</span> Target {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">method</span>() {
+</span></span><span style="display:flex;"><span>        serviceMethod(); <span style="color:#75715e">// 调用被适配类的方法</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>接入新的对象时需要创建新的适配器类</p>
+<h2 id="对象适配器-使用组合">对象适配器 (使用组合)</h2>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/2024-09-14-rrkuiq.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Target</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">method</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 被适配的类A</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Adaptee1</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">specificRequestA</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 被适配的类B</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Adaptee2</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">specificRequestB</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//...</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 对象适配器</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ObjectAdapter</span> <span style="color:#66d9ef">implements</span> Target {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> AdapteeA adapteeA;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> AdapteeB adapteeB;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ObjectAdapter</span>(AdapteeA adapteeA, AdapteeB adapteeB) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">adapteeA</span> <span style="color:#f92672">=</span> adapteeA;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">adapteeB</span> <span style="color:#f92672">=</span> adapteeB;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">method</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 可以调用两个被适配类的方法</span>
+</span></span><span style="display:flex;"><span>        adapteeA.<span style="color:#a6e22e">specificRequestA</span>();
+</span></span><span style="display:flex;"><span>        adapteeB.<span style="color:#a6e22e">specificRequestB</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Client</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>        AdapteeA adapteeA <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> AdapteeA();
+</span></span><span style="display:flex;"><span>        AdapteeB adapteeB <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> AdapteeB();
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 创建适配器实例，传入两个被适配类的实例</span>
+</span></span><span style="display:flex;"><span>        Target adapter <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ObjectAdapter(adapteeA, adapteeB);
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 通过适配器调用被适配类的方法</span>
+</span></span><span style="display:flex;"><span>        adapter.<span style="color:#a6e22e">request</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<p>总的来说也比较简单, 对象适配器相对来说更灵活,封装和隔离做的也更好, 在大多数情况下都是更优的选择</p>
+</blockquote>
 
       
     </article>
