@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en"
+  x-data
+  :class="$store.darkMode.class()"
+  :data-theme="$store.darkMode.theme()">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代理模式 | crisite&#39;s blog</title>
+
+    
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+
+
+
+<meta name="author" content="泡芙" />
+<meta name="description" content="代理模式是一种结构型设计模式, 代理模式可以在不修改原目标对象的前提下，提供额外的功能操作，扩展目标对象的功能.
+" />
+
+
+<link rel="canonical" href="http://localhost:1313/posts/designmode/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" />
+
+
+<meta property="og:url" content="http://localhost:1313/posts/designmode/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">
+  <meta property="og:site_name" content="crisite&#39;s blog">
+  <meta property="og:title" content="代理模式">
+  <meta property="og:description" content="代理模式是一种结构型设计模式, 代理模式可以在不修改原目标对象的前提下，提供额外的功能操作，扩展目标对象的功能.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-09-18T10:25:33+08:00">
+    <meta property="article:modified_time" content="2024-09-18T10:25:33+08:00">
+    <meta property="article:tag" content="设计模式">
+    <meta property="og:image" content="http://localhost:1313/img/designMode/decover9.png">
+
+
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/img/designMode/decover9.png">
+  <meta name="twitter:title" content="代理模式">
+  <meta name="twitter:description" content="代理模式是一种结构型设计模式, 代理模式可以在不修改原目标对象的前提下，提供额外的功能操作，扩展目标对象的功能.">
+
+
+
+<meta name="generator" content="Hugo 0.129.0">
+
+<link rel="stylesheet" href="/css/output.css" />
+
+<style>
+
+#dream-global-bg {
+  background-image: url(/img/background.png);
+}
+
+
+
+html.dark #dream-global-bg {
+  background-image: url(/img/background_dark.jpg);
+}
+
+</style>
+
+
+    
+
+
+<style>
+  pre {
+    padding: 1em;
+    overflow: auto;
+  }
+</style>
+
+
+
+
+
+
+    
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+
+  <body x-data="{
+    flip: false,
+  }">
+    
+    <div id="dream-global-bg"></div>
+
+    
+<nav class="mt-4 lg:mt-8 py-4">
+
+  <div class="container flex justify-between px-4">
+    <section class="flex items-center gap-4">
+      <div class="avatar cursor-pointer hover:online" @click="flip = !flip" title="翻转！">
+        <div class="h-10 rounded-full">
+          <img src="/img/avatar.png" alt="Hugo Theme Dream" />
+        </div>
+      </div>
+
+      
+      <div>
+        
+        <a href="http://localhost:1313/" class="text-lg font-semibold cursor-pointer">
+          Hugo Theme Dream
+        </a>
+        
+        
+      </div>
+      
+    </section>
+
+    <div class="dropdown dropdown-end sm:hidden">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-square">
+        <ion-icon name="menu-outline" size="large"></ion-icon>
+      </div>
+      <ul tabindex="0" class="dropdown-content menu w-36 bg-base-100 rounded-box z-[1] shadow-md">
+        
+
+
+<li>
+  <div role="link" tabindex="0" class="inline-flex items-center p-2 cursor-pointer" @click="flip = !flip" title="关于">
+    <ion-icon name="information-circle"></ion-icon>关于</div>
+</li>
+
+
+
+
+<li>
+  <a class="group inline-flex items-center p-2 cursor-pointer" href="/search" title="搜索">
+    <ion-icon name="search"></ion-icon>
+    搜索
+  </a>
+</li>
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/posts" title="归档">
+    <ion-icon name="archive"></ion-icon>
+    归档
+  </a>
+</li>
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/categories" title="所有分类">
+    <ion-icon name="grid"></ion-icon>
+    所有分类
+  </a>
+</li>
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/tags" title="所有标签">
+    <ion-icon name="pricetags"></ion-icon>
+    所有标签
+  </a>
+</li>
+
+
+
+
+      </ul>
+    </div>
+    <section class="hidden sm:flex sm:items-center sm:gap-2 md:gap-4">
+      
+      
+      
+      <div role="link" tabindex="0" class="text-sm font-semibold cursor-pointer hover:underline" @click="flip = !flip" title="关于">关于</div>
+      
+      
+
+      
+      <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/search" title="搜索">
+        <ion-icon class="group-hover:text-primary-content" name="search"></ion-icon>
+      </a>
+      
+
+      
+      <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/posts" title="归档">
+        <ion-icon class="group-hover:text-primary-content" name="archive"></ion-icon>
+      </a>
+      
+
+      
+      <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/categories" title="所有分类">
+        <ion-icon class="group-hover:text-primary-content" name="grid"></ion-icon>
+      </a>
+      
+
+      
+      <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/tags" title="所有标签">
+        <ion-icon class="group-hover:text-primary-content" name="pricetags"></ion-icon>
+      </a>
+      
+
+      
+    </section>
+  </div>
+</nav>
+
+
+    <div class="flip-container" :class="{ 'flip-it': flip }">
+      <div class="flipper">
+        <div class="front">
+          <div class="container">
+            
+<div class="mt-4 px-4">
+  
+  <div>
+  
+    
+    <article class="mx-auto prose dark:prose-invert" id="dream-single-post-main">
+      <header>
+        <h1>代理模式</h1>
+        <p class="text-sm">
+          
+            
+              星期三，九月 18 日，2024 年
+            
+          
+
+          | <span>2 分钟阅读</span>
+
+          
+          | <span>更新于
+            
+              
+                星期三，九月 18 日，2024 年
+              
+            </span>
+          
+        </p>
+        <div class="flex justify-between">
+          <div class="flex items-center">
+  
+  <div class="avatar mr-1">
+    <div class="w-8 rounded-full">
+      <img class="my-0" src="/img/avatar.png" />
+    </div>
+  </div>
+  
+
+  <span>
+  
+    
+      泡芙
+    
+  
+  </span>
+</div>
+
+
+          <span class="flex items-center gap-2">
+  <a class="group inline-flex items-center p-2 text-sm rounded-full cursor-pointer hover:bg-primary" href="https://twitter.com/intent/tweet?text=%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8f&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fdesignmode%2f%25E4%25BB%25A3%25E7%2590%2586%25E6%25A8%25A1%25E5%25BC%258F%2f" title="Share on X">
+    <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
+  </a>
+  <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fposts%2fdesignmode%2f%25E4%25BB%25A3%25E7%2590%2586%25E6%25A8%25A1%25E5%25BC%258F%2f" title="Share on Facebook">
+    <ion-icon class="group-hover:text-primary-content" name="logo-facebook"></ion-icon>
+  </a>
+</span>
+
+        </div>
+      </header>
+
+      
+
+      <p>代理模式是一种结构型设计模式, 代理模式可以在不修改原目标对象的前提下，提供额外的功能操作，扩展目标对象的功能.</p>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/2024-09-18-eZgw4o.png" alt=""></p>
+<p><code>Proxy</code> 类包含一个指向服务对象的成员变量, 在 <code>Proxy</code> 类中代理服务对象完成其任务（例如延迟初始化、 记录日志、 访问控制和缓存等）.</p>
+<p>代理模式主要分为静态代理, 和动态代理两种</p>
+<h2 id="静态代理">静态代理</h2>
+<p>静态代理一个代理类只能为一个特定接口实现代理功能</p>
+<p>优点：可以在不修改目标对象的前提下扩展目标对象的功能。</p>
+<p>缺点：</p>
+<ul>
+<li>冗余。由于代理对象要实现与目标对象一致的接口，会产生过多的代理类。</li>
+<li>不易维护。一旦接口增加方法，目标对象与代理对象都要进行修改。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">SmsService</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">send</span>(String message);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SmsServiceImpl</span> <span style="color:#66d9ef">implements</span> SmsService {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">send</span>(String message) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(message);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StaticProxy</span> <span style="color:#66d9ef">implements</span> SmsService {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> SmsService smsService;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">StaticProxy</span>(SmsService smsService) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">smsService</span> <span style="color:#f92672">=</span> smsService;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">send</span>(String message) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;send message: &#34;</span> <span style="color:#f92672">+</span> message);
+</span></span><span style="display:flex;"><span>        smsService.<span style="color:#a6e22e">send</span>(message);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;send success&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Client</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>        SmsService smsService <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SmsServiceImpl();
+</span></span><span style="display:flex;"><span>        StaticProxy staticProxy <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> StaticProxy(smsService);
+</span></span><span style="display:flex;"><span>        staticProxy.<span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;hello&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="动态代理">动态代理</h2>
+<p>静态代理与动态代理的区别主要在：</p>
+<ul>
+<li>静态代理在编译时就已经实现，编译完成后代理类是一个实际的class文件</li>
+<li>动态代理是在运行时动态生成的，即编译完成后没有实际的class文件，而是在运行时动态生成类字节码，并加载到JVM中</li>
+</ul>
+<p>特点：动态代理对象不需要实现接口，JDK动态代理目标对象必须实现接口, CGLIB动态代理目标对象不实现接口也可以。</p>
+<p>动态代理主要有两种实现方式 <strong>1. JDK动态代理, 2. CGLIB动态代理</strong></p>
+<h3 id="jdk动态代理">JDK动态代理</h3>
+<p>JDK动态代理主要涉及到 <code>InvocationHandler</code> 接口和 <code>Proxy</code> 类</p>
+<p>代理行为放在 <code>InvocationHandler</code> 的实现类中, 通过 <code>Proxy.newProxyInstance()</code> 来生成具体的代理对象</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JdkInvocationHandler</span> <span style="color:#66d9ef">implements</span> InvocationHandler {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/** 代理类中的真实对象 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Object target;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">JdkInvocationHandler</span>(Object target) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">target</span> <span style="color:#f92672">=</span> target;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/** 通过代理对象调用目标对象中的方法时,实际上被转发到了invoke方法中执行 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">invoke</span>(Object proxy, Method method, Object<span style="color:#f92672">[]</span> args) <span style="color:#66d9ef">throws</span> Throwable {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 代理操作</span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;before method &#34;</span> <span style="color:#f92672">+</span> method.<span style="color:#a6e22e">getName</span>());
+</span></span><span style="display:flex;"><span>        Object result <span style="color:#f92672">=</span> method.<span style="color:#a6e22e">invoke</span>(target, args);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 代理操作</span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;after method &#34;</span> <span style="color:#f92672">+</span> method.<span style="color:#a6e22e">getName</span>());
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> result;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JdkProxyFactory</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Object <span style="color:#a6e22e">getProxy</span>(Object target) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> Proxy.<span style="color:#a6e22e">newProxyInstance</span>(target.<span style="color:#a6e22e">getClass</span>().<span style="color:#a6e22e">getClassLoader</span>(),
+</span></span><span style="display:flex;"><span>                target.<span style="color:#a6e22e">getClass</span>().<span style="color:#a6e22e">getInterfaces</span>(),
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">new</span> JdkInvocationHandler(target));
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Client</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>        JdkProxyFactory jdkProxyFactory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JdkProxyFactory();
+</span></span><span style="display:flex;"><span>        SmsService smsService2 <span style="color:#f92672">=</span> (SmsService) jdkProxyFactory.<span style="color:#a6e22e">getProxy</span>(<span style="color:#66d9ef">new</span> SmsServiceImpl());
+</span></span><span style="display:flex;"><span>        smsService2.<span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;hello&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
+<p><code>Proxy.newProxyInstance()</code> 方法包含了三个参数 <code>ClassLoader loader</code>, <code>Class&lt;?&gt;[] interfaces</code>, <code>InvocationHandler h</code></p>
+<ul>
+<li><code>loader</code> 是目标对象的类加载器</li>
+<li><code>interfaces</code> 是目标对象实现的接口列表(为空则会抛出异常, 因此JDK动态代理只能代理实现了接口的类)</li>
+<li><code>h</code> 实现了 <code>InvocationHandler</code> 接口的对象</li>
+</ul>
+<blockquote>
+<p>源码注释: 如果h 或 interfaces 为空, 则会抛出空指针</p>
+<p>NullPointerException:
+if the interfaces array argument or any of its elements are null,
+or if the invocation handler, h, is null</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Object <span style="color:#a6e22e">newProxyInstance</span>(ClassLoader loader,
+</span></span><span style="display:flex;"><span>                                      Class<span style="color:#f92672">&lt;?&gt;[]</span> interfaces,
+</span></span><span style="display:flex;"><span>                                      InvocationHandler h)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">throws</span> IllegalArgumentException {}
+</span></span></code></pre></div><h2 id="cglib动态代理">CGLIB动态代理</h2>
+<p><code>CGLIB</code> 动态代理主要涉及 <code>MethodInterceptor</code> 接口和 <code>Enhancer</code> 类, 使用方式和 JDK动态代理类似</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CglibInterceptor</span> <span style="color:#66d9ef">implements</span> MethodInterceptor {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">intercept</span>(Object o, Method method, Object<span style="color:#f92672">[]</span> objects, MethodProxy methodProxy) <span style="color:#66d9ef">throws</span> Throwable {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 代理操作</span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;before method &#34;</span> <span style="color:#f92672">+</span> method.<span style="color:#a6e22e">getName</span>());
+</span></span><span style="display:flex;"><span>        Object object <span style="color:#f92672">=</span> methodProxy.<span style="color:#a6e22e">invokeSuper</span>(o, objects);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 代理操作</span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;after method &#34;</span> <span style="color:#f92672">+</span> method.<span style="color:#a6e22e">getName</span>());
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> object;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CglibProxyFactory</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Object <span style="color:#a6e22e">getProxy</span>(Class<span style="color:#f92672">&lt;?&gt;</span> clazz) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 创建动态代理增强类</span>
+</span></span><span style="display:flex;"><span>        Enhancer enhancer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Enhancer();
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 设置类加载器</span>
+</span></span><span style="display:flex;"><span>        enhancer.<span style="color:#a6e22e">setClassLoader</span>(clazz.<span style="color:#a6e22e">getClassLoader</span>());
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 设置被代理类</span>
+</span></span><span style="display:flex;"><span>        enhancer.<span style="color:#a6e22e">setSuperclass</span>(clazz);
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 设置方法拦截器</span>
+</span></span><span style="display:flex;"><span>        enhancer.<span style="color:#a6e22e">setCallback</span>(<span style="color:#66d9ef">new</span> CglibInterceptor());
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 创建代理类</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> enhancer.<span style="color:#a6e22e">create</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Client</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>        SmsService smsService3 <span style="color:#f92672">=</span> (SmsService) <span style="color:#66d9ef">new</span> CglibProxyFactory().<span style="color:#a6e22e">getProxy</span>(SmsServiceImpl.<span style="color:#a6e22e">class</span>);
+</span></span><span style="display:flex;"><span>        smsService3.<span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;hello&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
+<hr>
+<blockquote>
+<p>JDK 动态代理和 CGLIB 动态代理对比</p>
+<ul>
+<li>
+<p>JDK 动态代理只能代理实现了接口的类或者直接代理接口，而 CGLIB 可以代理未实现任何接口的类。
+另外， CGLIB 动态代理是通过生成一个被代理类的子类来拦截被代理类的方法调用，
+因此不能代理声明为 final 类型的类和方法。</p>
+</li>
+<li>
+<p>就二者的效率来说，大部分情况都是 JDK 动态代理更优秀，随着 JDK 版本的升级，这个优势更加明显。</p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>静态代理和动态代理的对比</p>
+<ul>
+<li>
+<p>灵活性：动态代理更加灵活，不需要必须实现接口，可以直接代理实现类，并且可以不需要针对每个目标类都创建一个代理类。
+另外，静态代理中，接口一旦新增加方法，目标对象和代理对象都要进行修改，这是非常麻烦的！</p>
+</li>
+<li>
+<p>JVM 层面：静态代理在编译时就将接口、实现类、代理类这些都变成了一个个实际的 class 文件。
+而动态代理是在运行时动态生成类字节码，并加载到 JVM 中的。</p>
+</li>
+</ul>
+</blockquote>
+<!-- raw HTML omitted -->
+<hr>
+<blockquote>
+<p>参考文档:</p>
+<p><a href="https://refactoringguru.cn/design-patterns/proxy">代理模式</a></p>
+<p><a href="https://javaguide.cn/java/basis/proxy.html">Java 代理模式详解</a></p>
+<p><a href="https://www.cnblogs.com/gonjan-blog/p/6685611.html">java动态代理实现与原理详细分析</a></p>
+</blockquote>
+
+      
+    </article>
+  </div>
+
+  
+
+  
+
+  <section class="max-w-[65ch] mx-auto space-y-4">
+    
+
+    
+
+    
+  </section>
+</div>
+
+
+            <footer class="flex justify-between items-center gap-2 px-4 py-12">
+              <div>
+  
+  <p>
+    © 2016 - 2024 crisite&#39;s blog
+  </p>
+  
+
+  
+  <p class="text-sm">
+    🌱
+    <span class="text-base-content/60">
+      Powered by <a class="hover:underline" href="https://gohugo.io/" target="_blank">Hugo</a> with theme
+      <a class="hover:underline" href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</span
+    >
+  </p>
+  
+</div>
+
+              <div
+  x-data="{ icons: [
+    { name: 'moon', status: 'y' },
+    { name: 'sunny', status: 'n' },
+    { name: 'desktop', status: 'auto' }
+  ] }"
+  class="flex items-center h-[32px] px-2 gap-2 border border-base-300 rounded-full"
+>
+  <template x-for="icon in icons">
+    <div
+      role="button"
+      tabindex="0"
+      class="group inline-flex justify-center items-center p-1 rounded-full cursor-pointer hover:bg-primary"
+      :class="$store.darkMode.icon() === icon.name && 'bg-primary'"
+      @click="$store.darkMode.toggle(icon.status)"
+    >
+      <ion-icon
+        :name="`${icon.name}-outline`"
+        class="group-hover:text-primary-content"
+        :class="$store.darkMode.icon() === icon.name && 'text-primary-content'"
+      >
+      </ion-icon>
+    </div>
+  </template>
+</div>
+
+            </footer>
+          </div>
+        </div>
+        <div class="back">
+          <div class="container">
+            <div class="dream-grid">
+  
+  
+  
+  <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 dream-column">
+    <article
+      class="card card-compact bg-base-100 hover:bg-base-content/10 shadow-xl dark:border dark:border-base-content/30"
+    >
+      <div class="card-body">
+        <div class="card-title">Me</div>
+
+        <div class="prose dark:prose-invert">
+          <p>a poor Programmer</p>
+<p>nothing.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+  
+  
+
+  
+
+  
+  
+</div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+  window.lightTheme = "emerald"
+  window.darkTheme = "forest"
+
+  window.hasTwitterEmbed =  null 
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+<script src="/js/grid.js"></script>
+<script src="/js/main.js"></script>
+
+    
+
+
+
+
+
+
+
+    
+
+    
+
+    <script type="module" src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js"></script>
+  </body>
+</html>

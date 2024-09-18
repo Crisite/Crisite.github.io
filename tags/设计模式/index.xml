@@ -6,8 +6,15 @@
     <description>Recent content in 设计模式 on crisite&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 10 Sep 2024 11:02:18 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 14 Sep 2024 18:47:43 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>装饰器模式</title>
+      <link>http://localhost:1313/posts/designmode/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Sat, 14 Sep 2024 18:47:43 +0800</pubDate>
+      <guid>http://localhost:1313/posts/designmode/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/</guid>
+      <description>&lt;p&gt;装饰器模式用法可以类比建造者模式, 每次使用装饰器类装饰基类后返回基类(), 然后就可以使用其他装饰器继续对其进行装饰.&#xA;(这样理解简单些, 但实际不是这样 TAT)&lt;/p&gt;</description>
+    </item>
     <item>
       <title>原型模式</title>
       <link>http://localhost:1313/posts/designmode/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/</link>
