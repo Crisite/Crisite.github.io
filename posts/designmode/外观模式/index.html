@@ -6,7 +6,7 @@
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=53853&amp;path=livereload" data-no-instant defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linux | crisite&#39;s blog</title>
+    <title>外观模式 | crisite&#39;s blog</title>
 
     
 <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
@@ -14,24 +14,33 @@
 
 
 
-<meta name="author" content="crisite" />
-<meta name="description" content="" />
+<meta name="author" content="泡芙" />
+<meta name="description" content="外观模式也是一种比较简单的设计模式.
+" />
 
 
-<link rel="canonical" href="http://localhost:53853/tags/linux/" />
+<link rel="canonical" href="http://localhost:53853/posts/designmode/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/" />
 
 
-<meta property="og:url" content="http://localhost:53853/tags/linux/">
+<meta property="og:url" content="http://localhost:53853/posts/designmode/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/">
   <meta property="og:site_name" content="crisite&#39;s blog">
-  <meta property="og:title" content="Linux">
+  <meta property="og:title" content="外观模式">
+  <meta property="og:description" content="外观模式也是一种比较简单的设计模式.">
   <meta property="og:locale" content="en">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-09-21T15:05:09+08:00">
+    <meta property="article:modified_time" content="2024-09-21T15:05:09+08:00">
+    <meta property="article:tag" content="设计模式">
+    <meta property="og:image" content="http://localhost:53853/img/designMode/decover11.png">
 
 
 
 
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Linux">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:53853/img/designMode/decover11.png">
+  <meta name="twitter:title" content="外观模式">
+  <meta name="twitter:description" content="外观模式也是一种比较简单的设计模式.">
 
 
 
@@ -54,7 +63,20 @@ html.dark #dream-global-bg {
 </style>
 
 
-     
+    
+
+
+<style>
+  pre {
+    padding: 1em;
+    overflow: auto;
+  }
+</style>
+
+
+
+
+
 
     
 
@@ -188,60 +210,34 @@ html.dark #dream-global-bg {
         <div class="front">
           <div class="container">
             
-
-<div class="flex flex-col md:flex-row gap-4 mt-8 lg:mt-12 px-4">
-  <div class="md:basis-[200px] lg:basis-[300px] prose dark:prose-invert">
-    <h1 class="text-2xl">Linux</h1>
-    <p class="text-sm">2篇文章</p>
-    <div class="flex flex-wrap gap-4 mt-6">
-      
-
-      
-      
-      <span class="badge h-6 badge-primary">
-        Linux
-      </span>
-      
-      
-      
-      <a href="/tags/windows/" class="badge h-6 no-underline hover:badge-primary">
-        Windows
-      </a>
-      
-      
-      
-      <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="badge h-6 no-underline hover:badge-primary">
-        设计模式
-      </a>
-      
-      
-    </div>
-  </div>
-  <div class="divider divider-vertical md:divider-horizontal"></div>
-  <div class="flex-1 space-y-4">
-    
-    
-    <a class="card image-full card-compact" href="/posts/wsl2%E5%AE%89%E8%A3%85arch/">
-  <figure class="h-[200px]">
+<div class="mt-4 px-4">
+  
+  <div>
   
     
-    <img class="w-full" src="/img/cover5.png" alt="Wsl2安装Arch" />
-    
-  
-  </figure>
+    <article class="mx-auto prose dark:prose-invert" id="dream-single-post-main">
+      <header>
+        <h1>外观模式</h1>
+        <p class="text-sm">
+          
+            
+              星期六，九月 21 日，2024 年
+            
+          
 
-  <div class="card-body">
-    <h2 class="card-title">Wsl2安装Arch</h2>
+          | <span>1 分钟阅读</span>
 
-    <p class="date">
-    星期四，八月 1 日，2024 年
-    </p>
-
-    <p>因为在一台设备上维护多个环境还是比较麻烦, 因此选择使用 <code>Wsl</code> 来创建一个 <code>Linux</code> 子系统</p>
-<p>比较习惯使用 <code>Arch</code> 就选择装 <code>Arch</code>了(虽然麻烦好多&hellip;)</p>
-
-    <div class="card-actions justify-between items-center mt-4">
-      <div class="flex items-center">
+          
+          | <span>更新于
+            
+              
+                星期六，九月 21 日，2024 年
+              
+            </span>
+          
+        </p>
+        <div class="flex justify-between">
+          <div class="flex items-center">
   
   <div class="avatar mr-1">
     <div class="w-8 rounded-full">
@@ -260,67 +256,62 @@ html.dark #dream-global-bg {
 </div>
 
 
-      <div class="inline-flex items-center">
-        <ion-icon name="time" class="mr-1"></ion-icon>
-        <span>3 分钟阅读</span>
-      </div>
-    </div>
+          <span class="flex items-center gap-2">
+  <a class="group inline-flex items-center p-2 text-sm rounded-full cursor-pointer hover:bg-primary" href="https://twitter.com/intent/tweet?text=%e5%a4%96%e8%a7%82%e6%a8%a1%e5%bc%8f&url=http%3a%2f%2flocalhost%3a53853%2fposts%2fdesignmode%2f%25E5%25A4%2596%25E8%25A7%2582%25E6%25A8%25A1%25E5%25BC%258F%2f" title="Share on X">
+    <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
+  </a>
+  <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a53853%2fposts%2fdesignmode%2f%25E5%25A4%2596%25E8%25A7%2582%25E6%25A8%25A1%25E5%25BC%258F%2f" title="Share on Facebook">
+    <ion-icon class="group-hover:text-primary-content" name="logo-facebook"></ion-icon>
+  </a>
+</span>
+
+        </div>
+      </header>
+
+      
+
+      <p>外观模式也是一种比较简单的设计模式.</p>
+<p>当觉得系统中的接口过多， 调用起来有些复杂的时候就可以考虑使用一个 外观类(Facade) 来对接口进行统一管理使用</p>
+<ul>
+<li>子系统越来越复杂，增加外观模式提供简单接口调用</li>
+<li>构建多层系统结构，利用外观对象作为每层的入口，简化层间调用</li>
+</ul>
+<h2 id="外观模式优缺点">外观模式优缺点</h2>
+<p>　　</p>
+<p>优点：</p>
+<ul>
+<li>简化了调用过程，无需了解深入子系统，防止带来风险</li>
+<li>减少系统依赖、松散耦合</li>
+<li>更好的划分访问层次</li>
+<li>符合迪米特法则，即最少知道原则
+　　</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>增加子系统、扩展子系统行为容易引入风险</li>
+<li>不符合开闭原则</li>
+</ul>
+<blockquote>
+<p>参考文章:
+<a href="https://www.cnblogs.com/jing99/p/12602696.html">设计模式之外观模式（Facade）详解及代码示例</a></p>
+</blockquote>
+
+      
+    </article>
   </div>
-</a>
+
+  
+
+  
+
+  <section class="max-w-[65ch] mx-auto space-y-4">
+    
 
     
-    <a class="card image-full card-compact" href="/posts/archlinux-dwm/">
-  <figure class="h-[200px]">
-  
+
     
-    <img class="w-full" src="/img/redhair.jpg" alt="ArchLinux&#43;dwm" />
-    
-  
-  </figure>
-
-  <div class="card-body">
-    <h2 class="card-title">ArchLinux&#43;dwm</h2>
-
-    <p class="date">
-    星期五，十月 6 日，2023 年
-    </p>
-
-    <p>之前装arch和dwm的时候都没有记录，现在慢慢更新对dwm的定制优化吧</p>
-
-    <div class="card-actions justify-between items-center mt-4">
-      <div class="flex items-center">
-  
-  <div class="avatar mr-1">
-    <div class="w-8 rounded-full">
-      <img class="my-0" src="/img/avatar.png" />
-    </div>
-  </div>
-  
-
-  <span>
-  
-    
-      泡芙
-    
-  
-  </span>
+  </section>
 </div>
-
-
-      <div class="inline-flex items-center">
-        <ion-icon name="time" class="mr-1"></ion-icon>
-        <span>1 分钟阅读</span>
-      </div>
-    </div>
-  </div>
-</a>
-
-    
-
-    
-  </div>
-</div>
-
 
 
             <footer class="flex justify-between items-center gap-2 px-4 py-12">
@@ -437,6 +428,8 @@ html.dark #dream-global-bg {
 <script src="/js/main.js"></script>
 
     
+
+
 
 
 

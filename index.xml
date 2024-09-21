@@ -6,8 +6,15 @@
     <description>Recent content on crisite&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 18 Sep 2024 10:25:33 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 21 Sep 2024 15:05:09 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>外观模式</title>
+      <link>http://localhost:1313/posts/designmode/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Sat, 21 Sep 2024 15:05:09 +0800</pubDate>
+      <guid>http://localhost:1313/posts/designmode/%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F/</guid>
+      <description>&lt;p&gt;外观模式也是一种比较简单的设计模式.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>代理模式</title>
       <link>http://localhost:1313/posts/designmode/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</link>
