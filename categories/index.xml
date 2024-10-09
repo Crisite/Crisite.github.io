@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on crisite&#39;s blog</title>
-    <link>http://localhost:1313/categories/</link>
+    <link>http://localhost:56082/categories/</link>
     <description>Recent content in Categories on crisite&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 23 Sep 2024 08:51:04 +0800</lastBuildDate>
-    <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 09 Oct 2024 15:36:37 +0800</lastBuildDate>
+    <atom:link href="http://localhost:56082/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>设计模式</title>
-      <link>http://localhost:1313/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
-      <pubDate>Mon, 23 Sep 2024 08:51:04 +0800</pubDate>
-      <guid>http://localhost:1313/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
+      <link>http://localhost:56082/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Wed, 09 Oct 2024 15:36:37 +0800</pubDate>
+      <guid>http://localhost:56082/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
       <description></description>
     </item>
     <item>
       <title>美化</title>
-      <link>http://localhost:1313/categories/%E7%BE%8E%E5%8C%96/</link>
+      <link>http://localhost:56082/categories/%E7%BE%8E%E5%8C%96/</link>
       <pubDate>Mon, 29 Jul 2024 21:49:54 +0800</pubDate>
-      <guid>http://localhost:1313/categories/%E7%BE%8E%E5%8C%96/</guid>
+      <guid>http://localhost:56082/categories/%E7%BE%8E%E5%8C%96/</guid>
       <description></description>
     </item>
     <item>
       <title>Linux</title>
-      <link>http://localhost:1313/categories/linux/</link>
+      <link>http://localhost:56082/categories/linux/</link>
       <pubDate>Fri, 06 Oct 2023 14:25:29 +0000</pubDate>
-      <guid>http://localhost:1313/categories/linux/</guid>
+      <guid>http://localhost:56082/categories/linux/</guid>
       <description></description>
     </item>
   </channel>
