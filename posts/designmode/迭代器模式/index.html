@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en"
+  x-data
+  :class="$store.darkMode.class()"
+  :data-theme="$store.darkMode.theme()">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>迭代器模式 | crisite&#39;s blog</title>
+
+    
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+
+
+
+<meta name="author" content="泡芙" />
+<meta name="description" content="迭代器模式主要体现的是抽象的设计思想(将行为和对象分离, 解耦且复用), 把迭代的行为定义在抽象类/接口中, 使得 无论实现如何变化, 都可以使用Iterator.
+" />
+
+
+<link rel="canonical" href="http://localhost:1313/posts/designmode/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/" />
+
+
+<meta property="og:url" content="http://localhost:1313/posts/designmode/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/">
+  <meta property="og:site_name" content="crisite&#39;s blog">
+  <meta property="og:title" content="迭代器模式">
+  <meta property="og:description" content="迭代器模式主要体现的是抽象的设计思想(将行为和对象分离, 解耦且复用), 把迭代的行为定义在抽象类/接口中, 使得 无论实现如何变化, 都可以使用Iterator.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-10-10T20:00:31+08:00">
+    <meta property="article:modified_time" content="2024-10-10T20:00:31+08:00">
+    <meta property="article:tag" content="设计模式">
+    <meta property="og:image" content="http://localhost:1313/img/designMode/decover14.jpg">
+
+
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="http://localhost:1313/img/designMode/decover14.jpg">
+  <meta name="twitter:title" content="迭代器模式">
+  <meta name="twitter:description" content="迭代器模式主要体现的是抽象的设计思想(将行为和对象分离, 解耦且复用), 把迭代的行为定义在抽象类/接口中, 使得 无论实现如何变化, 都可以使用Iterator.">
+
+
+
+<meta name="generator" content="Hugo 0.129.0">
+
+<link rel="stylesheet" href="/css/output.css" />
+
+<style>
+
+#dream-global-bg {
+  background-image: url(/img/background.png);
+}
+
+
+
+html.dark #dream-global-bg {
+  background-image: url(/img/background_dark.jpg);
+}
+
+</style>
+
+
+    
+
+
+<style>
+  pre {
+    padding: 1em;
+    overflow: auto;
+  }
+</style>
+
+
+
+
+
+
+    
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+
+  <body x-data="{
+    flip: false,
+  }">
+    
+    <div id="dream-global-bg"></div>
+
+    
+<nav class="mt-4 lg:mt-8 py-4">
+
+  <div class="container flex justify-between px-4">
+    <section class="flex items-center gap-4">
+      <div class="avatar cursor-pointer hover:online" @click="flip = !flip" title="翻转！">
+        <div class="h-10 rounded-full">
+          <img src="/img/avatar.png" alt="Hugo Theme Dream" />
+        </div>
+      </div>
+
+      
+      <div>
+        
+        <a href="http://localhost:1313/" class="text-lg font-semibold cursor-pointer">
+          Hugo Theme Dream
+        </a>
+        
+        
+      </div>
+      
+    </section>
+
+    <div class="dropdown dropdown-end sm:hidden">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-square">
+        <ion-icon name="menu-outline" size="large"></ion-icon>
+      </div>
+      <ul tabindex="0" class="dropdown-content menu w-36 bg-base-100 rounded-box z-[1] shadow-md">
+        
+
+
+<li>
+  <div role="link" tabindex="0" class="inline-flex items-center p-2 cursor-pointer" @click="flip = !flip" title="关于">
+    <ion-icon name="information-circle"></ion-icon>关于</div>
+</li>
+
+
+
+
+<li>
+  <a class="group inline-flex items-center p-2 cursor-pointer" href="/search" title="搜索">
+    <ion-icon name="search"></ion-icon>
+    搜索
+  </a>
+</li>
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/posts" title="归档">
+    <ion-icon name="archive"></ion-icon>
+    归档
+  </a>
+</li>
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/categories" title="所有分类">
+    <ion-icon name="grid"></ion-icon>
+    所有分类
+  </a>
+</li>
+
+
+
+<li>
+  <a class="inline-flex items-center p-2 cursor-pointer" href="/tags" title="所有标签">
+    <ion-icon name="pricetags"></ion-icon>
+    所有标签
+  </a>
+</li>
+
+
+
+
+      </ul>
+    </div>
+    <section class="hidden sm:flex sm:items-center sm:gap-2 md:gap-4">
+      
+      
+      
+      <div role="link" tabindex="0" class="text-sm font-semibold cursor-pointer hover:underline" @click="flip = !flip" title="关于">关于</div>
+      
+      
+
+      
+      <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/search" title="搜索">
+        <ion-icon class="group-hover:text-primary-content" name="search"></ion-icon>
+      </a>
+      
+
+      
+      <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/posts" title="归档">
+        <ion-icon class="group-hover:text-primary-content" name="archive"></ion-icon>
+      </a>
+      
+
+      
+      <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/categories" title="所有分类">
+        <ion-icon class="group-hover:text-primary-content" name="grid"></ion-icon>
+      </a>
+      
+
+      
+      <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="/tags" title="所有标签">
+        <ion-icon class="group-hover:text-primary-content" name="pricetags"></ion-icon>
+      </a>
+      
+
+      
+    </section>
+  </div>
+</nav>
+
+
+    <div class="flip-container" :class="{ 'flip-it': flip }">
+      <div class="flipper">
+        <div class="front">
+          <div class="container">
+            
+<div class="mt-4 px-4">
+  
+  <div>
+  
+    
+    <article class="mx-auto prose dark:prose-invert" id="dream-single-post-main">
+      <header>
+        <h1>迭代器模式</h1>
+        <p class="text-sm">
+          
+            
+              星期四，十月 10 日，2024 年
+            
+          
+
+          | <span>1 分钟阅读</span>
+
+          
+          | <span>更新于
+            
+              
+                星期四，十月 10 日，2024 年
+              
+            </span>
+          
+        </p>
+        <div class="flex justify-between">
+          <div class="flex items-center">
+  
+  <div class="avatar mr-1">
+    <div class="w-8 rounded-full">
+      <img class="my-0" src="/img/avatar.png" />
+    </div>
+  </div>
+  
+
+  <span>
+  
+    
+      泡芙
+    
+  
+  </span>
+</div>
+
+
+          <span class="flex items-center gap-2">
+  <a class="group inline-flex items-center p-2 text-sm rounded-full cursor-pointer hover:bg-primary" href="https://twitter.com/intent/tweet?text=%e8%bf%ad%e4%bb%a3%e5%99%a8%e6%a8%a1%e5%bc%8f&url=http%3a%2f%2flocalhost%3a1313%2fposts%2fdesignmode%2f%25E8%25BF%25AD%25E4%25BB%25A3%25E5%2599%25A8%25E6%25A8%25A1%25E5%25BC%258F%2f" title="Share on X">
+    <ion-icon class="group-hover:text-primary-content" name="logo-x"></ion-icon>
+  </a>
+  <a class="group inline-flex items-center p-2 rounded-full cursor-pointer hover:bg-primary" href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fposts%2fdesignmode%2f%25E8%25BF%25AD%25E4%25BB%25A3%25E5%2599%25A8%25E6%25A8%25A1%25E5%25BC%258F%2f" title="Share on Facebook">
+    <ion-icon class="group-hover:text-primary-content" name="logo-facebook"></ion-icon>
+  </a>
+</span>
+
+        </div>
+      </header>
+
+      
+
+      <p>迭代器模式主要体现的是抽象的设计思想(将行为和对象分离, 解耦且复用),
+把迭代的行为定义在抽象类/接口中, 使得 <strong>无论实现如何变化, 都可以使用<code>Iterator</code></strong>.</p>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/2024-10-10-ETNyd3.png" alt=""></p>
+<p>书上的迭代器模式的 <code>uml</code> 图是这样的.</p>
+<p>但是在 <code>Java</code> 中, 以 <code>ArrayList</code> 为例, 其 <code>uml</code> 图却是:</p>
+<p><img src="https://crisite-img.oss-cn-hangzhou.aliyuncs.com/img/2024-10-10-ObePgD.png" alt=""></p>
+<p>看起来不是标准的迭代器模式, 因为虽然迭代方法是定义在 <code>Iterator</code> 中, 但是最终还是由 <code>ArrayList</code> 来实现一切.</p>
+<blockquote>
+<p>分离关注点：虽然ArrayList类实现了迭代行为，但这并不意味着遍历逻辑与集合数据结构的表示没有被分离。实际上，ArrayList类实现了Iterable接口，该接口定义了一个iterator()方法，该方法返回一个实现了Iterator接口的对象。这个Iterator对象才是真正负责遍历集合元素的角色。</p>
+<p>迭代器接口：ArrayList返回的Iterator对象隐藏了遍历集合的细节。客户端代码不需要知道ArrayList是如何存储元素的，也不需要知道如何遍历这些元素。它只需要使用Iterator提供的next(), hasNext(), 和remove()方法。</p>
+<p>内部迭代器：ArrayList中的迭代器可以被视为内部迭代器，因为它是由ArrayList类自己实现的。内部迭代器通常更了解它所遍历的集合的内部结构，但这并不妨碍它作为一个迭代器角色存在。</p>
+<p>符合迭代器模式：尽管ArrayList类同时包含了数据和遍历逻辑，但迭代器模式的目的是为了提供一个统一的遍历接口，并允许不同的集合类型以相同的方式被遍历。ArrayList通过实现Iterable接口并提供Iterator的实现，正是遵循了这一模式。</p>
+</blockquote>
+<p>所以迭代器模式的最终目的就是提供一个统一的遍历接口, 使得用户无需关系其具体的实现方式, 只需要按照 <code>Iterator</code> 提供的方法操作元素集合即可</p>
+<h3 id="实现">实现：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Aggregate</span> {
+</span></span><span style="display:flex;"><span>    Iterator <span style="color:#a6e22e">iterator</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Iterator</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">hasNext</span>();
+</span></span><span style="display:flex;"><span>    Object <span style="color:#a6e22e">next</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BookIterator</span> <span style="color:#66d9ef">implements</span> Iterator {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> BookShelf bookShelf;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> index;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">BookIterator</span>(BookShelf bookShelf) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">bookShelf</span> <span style="color:#f92672">=</span> bookShelf;
+</span></span><span style="display:flex;"><span>        index <span style="color:#f92672">=</span> 0;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">hasNext</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> index <span style="color:#f92672">&lt;</span> bookShelf.<span style="color:#a6e22e">getLength</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">next</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> bookShelf.<span style="color:#a6e22e">getBookAt</span>(index<span style="color:#f92672">++</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BookShelf</span> <span style="color:#66d9ef">implements</span> Aggregate {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> Book<span style="color:#f92672">[]</span> books;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> last;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/** 此处可以根据需要设计多种不同的迭代器 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Iterator <span style="color:#a6e22e">iterator</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> BookIterator(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">BookShelf</span>(<span style="color:#66d9ef">int</span> maxsize) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">books</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Book<span style="color:#f92672">[</span>maxsize<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Book <span style="color:#a6e22e">getBookAt</span>(<span style="color:#66d9ef">int</span> index) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> books<span style="color:#f92672">[</span>index<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getLength</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> last;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">appendBook</span>(Book book) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">books</span><span style="color:#f92672">[</span>last<span style="color:#f92672">++]</span> <span style="color:#f92672">=</span> book;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Book</span> {
+</span></span><span style="display:flex;"><span>    String name;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Book</span>(String name) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">name</span> <span style="color:#f92672">=</span> name;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">getName</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> name;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>        BookShelf bookShelf <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> BookShelf(4);
+</span></span><span style="display:flex;"><span>        bookShelf.<span style="color:#a6e22e">appendBook</span>(<span style="color:#66d9ef">new</span> Book(<span style="color:#e6db74">&#34;1&#34;</span>));
+</span></span><span style="display:flex;"><span>        bookShelf.<span style="color:#a6e22e">appendBook</span>(<span style="color:#66d9ef">new</span> Book(<span style="color:#e6db74">&#34;2&#34;</span>));
+</span></span><span style="display:flex;"><span>        bookShelf.<span style="color:#a6e22e">appendBook</span>(<span style="color:#66d9ef">new</span> Book(<span style="color:#e6db74">&#34;3&#34;</span>));
+</span></span><span style="display:flex;"><span>        bookShelf.<span style="color:#a6e22e">appendBook</span>(<span style="color:#66d9ef">new</span> Book(<span style="color:#e6db74">&#34;4&#34;</span>));
+</span></span><span style="display:flex;"><span>        Iterator iterator <span style="color:#f92672">=</span> bookShelf.<span style="color:#a6e22e">iterator</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span>(iterator.<span style="color:#a6e22e">hasNext</span>()) {
+</span></span><span style="display:flex;"><span>            Book book <span style="color:#f92672">=</span> (Book) iterator.<span style="color:#a6e22e">next</span>();
+</span></span><span style="display:flex;"><span>            System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(book.<span style="color:#a6e22e">getName</span>());
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><blockquote>
+<p>参考: <a href="https://book.douban.com/subject/26933281/">《图解设计模式》</a></p>
+</blockquote>
+
+      
+    </article>
+  </div>
+
+  
+
+  
+
+  <section class="max-w-[65ch] mx-auto space-y-4">
+    
+
+    
+
+    
+  </section>
+</div>
+
+
+            <footer class="flex justify-between items-center gap-2 px-4 py-12">
+              <div>
+  
+  <p>
+    © 2016 - 2024 crisite&#39;s blog
+  </p>
+  
+
+  
+  <p class="text-sm">
+    🌱
+    <span class="text-base-content/60">
+      Powered by <a class="hover:underline" href="https://gohugo.io/" target="_blank">Hugo</a> with theme
+      <a class="hover:underline" href="https://github.com/g1eny0ung/hugo-theme-dream" target="_blank">Dream</a>.</span
+    >
+  </p>
+  
+</div>
+
+              <div
+  x-data="{ icons: [
+    { name: 'moon', status: 'y' },
+    { name: 'sunny', status: 'n' },
+    { name: 'desktop', status: 'auto' }
+  ] }"
+  class="flex items-center h-[32px] px-2 gap-2 border border-base-300 rounded-full"
+>
+  <template x-for="icon in icons">
+    <div
+      role="button"
+      tabindex="0"
+      class="group inline-flex justify-center items-center p-1 rounded-full cursor-pointer hover:bg-primary"
+      :class="$store.darkMode.icon() === icon.name && 'bg-primary'"
+      @click="$store.darkMode.toggle(icon.status)"
+    >
+      <ion-icon
+        :name="`${icon.name}-outline`"
+        class="group-hover:text-primary-content"
+        :class="$store.darkMode.icon() === icon.name && 'text-primary-content'"
+      >
+      </ion-icon>
+    </div>
+  </template>
+</div>
+
+            </footer>
+          </div>
+        </div>
+        <div class="back">
+          <div class="container">
+            <div class="dream-grid">
+  
+  
+  
+  <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4 dream-column">
+    <article
+      class="card card-compact bg-base-100 hover:bg-base-content/10 shadow-xl dark:border dark:border-base-content/30"
+    >
+      <div class="card-body">
+        <div class="card-title">Me</div>
+
+        <div class="prose dark:prose-invert">
+          <p>a poor Programmer</p>
+<p>nothing.</p>
+        </div>
+      </div>
+    </article>
+  </div>
+  
+  
+
+  
+
+  
+  
+</div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+  window.lightTheme = "emerald"
+  window.darkTheme = "forest"
+
+  window.hasTwitterEmbed =  null 
+  if (window.hasTwitterEmbed) {
+    
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+<script src="/js/grid.js"></script>
+<script src="/js/main.js"></script>
+
+    
+
+
+
+
+
+
+
+    
+
+    
+
+    <script type="module" src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.4.0/dist/ionicons/ionicons.js"></script>
+  </body>
+</html>
